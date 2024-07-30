@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">shopall</string>
+       <string name="facebook_app_id">1009565013680240</string>
+   <string name="facebook_client_token">56789</string>
 </resources>

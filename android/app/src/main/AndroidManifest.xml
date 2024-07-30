@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
@@ -9,6 +11,16 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+    <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
+      
+        <!-- <meta-data
+    android:name="com.twitter.sdk.android.CONSUMER_KEY"
+    android:value="xuclCSBOouklC619U57TfUfbj" />
+  <meta-data
+    android:name="com.twitter.sdk.android.CONSUMER_SECRET"
+    android:value="JHRJlO2jjjUmWFspBd2PyKDpix3OkKb7UKZ7u4cpRwgwcILiZo" /> -->
+      
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"

@@ -4,56 +4,35 @@
  *
  * @format
  */
-
+import 'react-native-gesture-handler';
+import 'react-native-safe-area-context';
+import 'react-native-reanimated';
 import React from 'react';
-import type {PropsWithChildren} from 'react';
+import {LogBox, StatusBar, useColorScheme} from 'react-native';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {NavigationContainer} from '@react-navigation/native';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {RecoilRoot} from 'recoil';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+  HomeStack,
+  CustomToast,
+  SettingsStack,
+  CustomDrawerContent,
+  CustomerCare,
+  AddProduct,
+} from './components/index';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {GalioProvider} from 'galio-framework';
+import globalStyle from './constants/globalStyle';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {enableScreens} from 'react-native-screens';
+import ProfileStack from './components/Stacks/ProfileStack';
+import {screen} from './constants/screens';
+LogBox.ignoreLogs(['']);
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+enableScreens();
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+const Drawer = createDrawerNavigator();
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -63,56 +42,57 @@ function App(): React.JSX.Element {
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <GalioProvider theme={globalStyle}>
+      <SafeAreaProvider>
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor={backgroundStyle.backgroundColor}
+        />
+        <RecoilRoot>
+          <NavigationContainer>
+            <Drawer.Navigator
+              drawerContent={props => <CustomDrawerContent {...props} />}
+              screenOptions={{
+                drawerStyle: {
+                  backgroundColor: 'white',
+                  width: 270,
+                },
+              }}
+              initialRouteName={screen.homeStack}>
+              <Drawer.Screen
+                options={{
+                  headerShown: false,
+                }}
+                name={screen.homeStack}
+                component={HomeStack}
+              />
+
+              <Drawer.Screen
+                name={screen.profileStack}
+                options={{
+                  headerShown: false,
+                }}
+                component={ProfileStack}
+              />
+              <Drawer.Screen
+                name={screen.settingsStack}
+                options={{
+                  headerShown: false,
+                }}
+                component={SettingsStack}
+              />
+              <Drawer.Screen
+                name={screen.customerCare}
+                component={CustomerCare}
+              />
+              <Drawer.Screen name={screen.addProduct} component={AddProduct} />
+            </Drawer.Navigator>
+          </NavigationContainer>
+          <CustomToast />
+        </RecoilRoot>
+      </SafeAreaProvider>
+    </GalioProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;

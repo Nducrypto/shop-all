@@ -40,6 +40,43 @@
 	<array>
 		<string>arm64</string>
 	</array>
+
+
+
+<!-- facebook authentication for firebase ios  -->
+<key>CFBundleURLTypes</key>
+<array>
+    <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>fb1009565013680240</string>
+        </array>
+    </dict>
+</array>
+
+<!-- <array>
+  <dict>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>twitterkit-<xuclCSBOouklC619U57TfUfbj></string>
+    </array>
+  </dict>
+</array> -->
+<key>LSApplicationQueriesSchemes</key>
+<array>
+    <string>twitter</string>
+    <string>twitterauth</string>
+</array>
+
+
+<key>FacebookAppID</key>
+<string>1009565013680240</string>
+<key>FacebookClientToken</key>
+<string>64b8d7975d81aefba60418891d3ea0fe</string>
+<key>FacebookDisplayName</key>
+<string>SHOPALL</string>
+<!-- end of facebook auth -->
+
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -48,5 +85,8 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<!-- enabling face id biometrics-->
+		<key>NSFaceIDUsageDescription</key>
+    <string>Enabling Face ID</string>
 </dict>
 </plist>
