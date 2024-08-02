@@ -48,6 +48,7 @@ jest.mock('../constants/biometricsUtils', () => ({
   checkBiometrics: jest.fn(),
   deleteBiometricPublicKey: jest.fn(),
   generateBiometricPublicKey: jest.fn(),
+  checkIfBiometricKeysExist: jest.fn(),
 }));
 
 jest.mock('../actions/usersAction', () => ({

@@ -7,14 +7,14 @@ export const styles = StyleSheet.create({
     width: '95%',
     padding: 10,
     borderRadius: 5,
-    backgroundColor: globalStyle.COLORS.DARKGREEN,
+    backgroundColor: globalStyle.COLORS.SUCCESS,
   },
   errorCon: {
     height: 60,
     width: '95%',
     padding: 10,
     borderRadius: 20,
-    backgroundColor: 'darkred',
+    backgroundColor: globalStyle.COLORS.ERROR,
   },
   text: {
     color: 'white',

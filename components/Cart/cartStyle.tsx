@@ -16,10 +16,14 @@ export const styles = StyleSheet.create({
     color: globalStyle.COLORS.ERROR,
     fontWeight: 'bold',
   },
-
+  viewSavedItemtext: {
+    color: globalStyle.COLORS.GRADIENT_START,
+    textAlign: 'center',
+    marginTop: 10,
+  },
   itemCon: {
     marginVertical: 20,
-    marginTop: 30,
+    marginTop: 20,
   },
   shadow: {
     shadowColor: 'black',

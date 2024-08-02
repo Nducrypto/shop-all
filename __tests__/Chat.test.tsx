@@ -2,7 +2,10 @@ import React from 'react';
 import {render, fireEvent, act, waitFor} from '@testing-library/react-native';
 import {Chat} from '../components';
 import {createMessage, updateUnreadMessage} from '../actions/chatActions';
-import {messageNotificationForCustomer} from '../components//recoilState/chatState';
+import {
+  customerSpecificChat,
+  messageNotificationForCustomer,
+} from '../components//recoilState/chatState';
 import {useUserState} from '../components/recoilState/userState';
 
 jest.mock('../actions/chatActions', () => ({
@@ -42,11 +45,11 @@ describe('Chat Component', () => {
   });
 
   it('renders correctly', () => {
+    (customerSpecificChat as jest.Mock).mockReturnValue([]);
+
     const {getByText} = render(<Chat />);
     expect(
-      getByText(
-        /Hello John Doe welcome to ShopEase! 😊 How can we assist you today?/,
-      ),
+      getByText('Hello John Doe! 😊 How can i assist you today?'),
     ).toBeTruthy();
   });
 
@@ -88,12 +91,20 @@ describe('Chat Component', () => {
 
   it('enables send button only when message is entered', async () => {
     const {getByPlaceholderText, getByTestId} = render(<Chat />);
-    expect(getByTestId('button').props.accessibilityState.disabled).toBe(true);
 
+    act(() => {
+      expect(getByTestId('button').props.accessibilityState.disabled).toBe(
+        true,
+      );
+    });
     act(() => {
       fireEvent.changeText(getByPlaceholderText('Message'), 'Hello World');
     });
-    expect(getByTestId('button').props.accessibilityState.disabled).toBe(false);
+    act(() => {
+      expect(getByTestId('button').props.accessibilityState.disabled).toBe(
+        false,
+      );
+    });
   });
 
   it('does not render if currentUser email is missing', () => {
@@ -103,9 +114,7 @@ describe('Chat Component', () => {
     const {queryByText} = render(<Chat />);
 
     expect(
-      queryByText(
-        /Hello John Doe welcome to ShopEase! 😊 How can we assist you today?/,
-      ),
+      queryByText('Hello John Doe! 😊 How can i assist you today?'),
     ).toBeNull();
   });
 });

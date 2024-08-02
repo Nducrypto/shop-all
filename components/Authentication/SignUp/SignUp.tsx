@@ -83,7 +83,7 @@ const SignUp = () => {
           onPress={handleFaceebokSignIn}
         />
         <Entypo name="twitter-with-circle" color="#5BC0DE" size={50} />
-        <Entypo name="facebook-with-circle" color="#EA4C89" size={50} />
+        <Entypo name="dribbble-with-circle" color="#EA4C89" size={50} />
       </View>
       {loading && <ActivityIndicator />}
       <View style={styles.sharedCon}>

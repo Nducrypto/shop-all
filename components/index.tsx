@@ -27,6 +27,7 @@ import ComingSoon from './ComingSoon/ComingSoon';
 import Settings from './Settings/Settings';
 import PrivacyPolicy from './PrivacyPolicy/PrivacyPolicy';
 import About from './About/About';
+import ForgotPassword from './Authentication/ForgotPassword/ForgotPassword';
 
 export {
   HomeStack,
@@ -37,6 +38,7 @@ export {
   Profile,
   SignUp,
   SignIn,
+  ForgotPassword,
   Order,
   CustomToast,
   AddProduct,

@@ -1,18 +1,21 @@
-import React from 'react';
-import {getAllOrders} from '../../actions/orderActions';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, FlatList, RefreshControl} from 'react-native';
 import {useOrderState, userOrdersHistory} from '../recoilState/orderState';
-import {useRoute} from '@react-navigation/native';
+import {useUserState} from '../../components/recoilState/userState';
+import globalStyle from '../../constants/globalStyle';
 
 const Order = () => {
-  getAllOrders();
-  const {params} = useRoute();
-  const getEmail = params as {email: string};
   const {isOrderLoading} = useOrderState();
-  const userOrder = userOrdersHistory(getEmail.email);
+  const {currentUser} = useUserState();
+  const [isRefreshed, setIsRefreshed] = useState<boolean>(false);
+
+  const userOrder = userOrdersHistory(currentUser.email);
 
   const handleRefresh = () => {
-    getAllOrders();
+    setIsRefreshed(true);
+    setTimeout(() => {
+      setIsRefreshed(false);
+    }, 3000);
   };
 
   if (!userOrder.length && !isOrderLoading) {
@@ -69,9 +72,9 @@ const Order = () => {
       keyExtractor={item => item.orderId}
       refreshControl={
         <RefreshControl
-          refreshing={isOrderLoading}
+          refreshing={isRefreshed}
           onRefresh={handleRefresh}
-          colors={['red']}
+          colors={['green', 'yellow']}
         />
       }
     />
@@ -107,7 +110,7 @@ const styles = StyleSheet.create({
   },
   orderHeader: {
     marginBottom: 10,
-    backgroundColor: '#0077B6',
+    backgroundColor: globalStyle.COLORS.DARKGREEN,
     padding: 10,
     borderRadius: 10,
   },
@@ -122,7 +125,7 @@ const styles = StyleSheet.create({
   },
   subtotal: {
     fontWeight: 'bold',
-    color: '#333',
+    color: globalStyle.COLORS.GRADIENT_START,
     fontSize: 18,
   },
   itemsList: {
@@ -147,7 +150,7 @@ const styles = StyleSheet.create({
   },
   itemPrice: {
     fontSize: 16,
-    color: '#0077B6',
+    color: globalStyle.COLORS.GRADIENT_START,
   },
   loadingContainer: {
     flex: 1,

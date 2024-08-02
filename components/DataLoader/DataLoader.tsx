@@ -5,7 +5,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {Children} from 'react';
+import React from 'react';
 import globalStyle from '../../constants/globalStyle';
 
 interface Props {

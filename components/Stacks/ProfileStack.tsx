@@ -7,13 +7,12 @@ import {
   Cart,
   Chat,
   Profile,
+  Order,
 } from '../index';
-import {useUserState} from '../recoilState/userState';
 import {screen} from '../../constants/screens';
 
 const Tab = createStackNavigator<any>();
 const ProfileStack = () => {
-  const {currentUser} = useUserState();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -49,10 +48,11 @@ const ProfileStack = () => {
       <Tab.Screen
         name={screen.chat}
         options={{
-          title: currentUser?.userName,
+          title: 'Ndubuisi Agbo',
         }}
         component={Chat}
       />
+      <Tab.Screen name={screen.orders} component={Order} />
       <Tab.Screen
         name={screen.cart}
         options={{

@@ -12,6 +12,7 @@ import {
   Cart,
   Chat,
   GetStarted,
+  ForgotPassword,
 } from '../index';
 import ProductList from '../ProductsList/ProductList';
 import {useGetStarted} from '../recoilState/getStartedState';
@@ -87,10 +88,23 @@ const HomeStack = () => {
         headerTintColor: 'black',
       },
     },
+
     {
       name: screen.signIn,
       component: SignIn,
       options: {
+        headerTransparent: true,
+        headerStyle: {
+          backgroundColor: 'transparent',
+        },
+        headerTintColor: 'white',
+      },
+    },
+    {
+      name: screen.forgotPassword,
+      component: ForgotPassword,
+      options: {
+        title: 'Forgot Password',
         headerTransparent: true,
         headerStyle: {
           backgroundColor: 'transparent',

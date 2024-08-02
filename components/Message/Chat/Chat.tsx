@@ -17,11 +17,15 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import globalStyle from '../../../constants/globalStyle';
 import moment from 'moment';
 import {width} from '../../../constants/utils';
+import {screen, NavigationProps} from '../../../constants/screens';
+import {useNavigation} from '@react-navigation/native';
 
 const Chat = () => {
   chatAction.fetchAllChat();
   const [message, setMessage] = useState('');
   const scrollViewRef = useRef<any>();
+  const navigation = useNavigation<NavigationProps>();
+
   const {setSnackBar} = useSnackBarState();
   const {currentUser} = useUserState();
   const {allChat} = chatState.useAllChatState();
@@ -76,14 +80,23 @@ const Chat = () => {
   function isCurrentUserMessage(alignmentKey: string) {
     return alignmentKey === currentUser?.userId;
   }
-  if (!currentUser?.email) return null;
+  if (!currentUser?.email) {
+    return (
+      <View style={styles.signInCon}>
+        <Text
+          style={styles.signInText}
+          onPress={() => navigation.navigate(screen.signIn)}>
+          Please Sign in to continue
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       {!uniqueDialogues.length && (
         <Text style={styles.welcomeText}>
-          Hello {currentUser?.userName} welcome to ShopEase! 😊 How can we
-          assist you today?
+          Hello {currentUser?.userName}! 😊 How can i assist you today?
         </Text>
       )}
       <View style={styles.content}>
@@ -177,7 +190,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-
+  signInCon: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  signInText: {
+    color: 'black',
+    fontWeight: '700',
+  },
   welcomeText: {
     textAlign: 'center',
     marginTop: 100,

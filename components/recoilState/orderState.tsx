@@ -1,4 +1,4 @@
-import {atom, useRecoilState, useSetRecoilState} from 'recoil';
+import {atom, useRecoilState} from 'recoil';
 import {CartItem} from './cartState';
 import {mergeSort} from '../../constants/utils';
 export interface OrderItem {

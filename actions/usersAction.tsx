@@ -1,19 +1,10 @@
 import {useEffect} from 'react';
-import {
-  firestore,
-  collection,
-  onAuthStateChanged,
-  auth,
-  onSnapshot,
-  getDocs,
-  updateDoc,
-  doc,
-} from '../components/config/firebase';
+import * as firebase from '../components/config/firebase';
 import {
   CollectionInterface,
   useUserState,
 } from '../components/recoilState/userState';
-import Crypto from 'react-native-quick-crypto';
+import crypto from 'react-native-quick-crypto';
 
 import {USERS} from '@env';
 
@@ -28,32 +19,38 @@ export const useAuthentication = () => {
       isUserLoading: true,
       isAuthError: false,
     }));
-    const unSubscribe = onAuthStateChanged(auth, async user => {
-      if (user) {
-        const usersCollectionRef = collection(firestore, usersRoute);
-        const userSnapshot = await getDocs(usersCollectionRef);
-        for (const doc of userSnapshot.docs) {
-          const data = doc?.data() as CollectionInterface;
+    const unSubscribe = firebase.onAuthStateChanged(
+      firebase.auth,
+      async user => {
+        if (user) {
+          const usersCollectionRef = firebase.collection(
+            firebase.firestore,
+            usersRoute,
+          );
+          const userSnapshot = await firebase.getDocs(usersCollectionRef);
+          for (const doc of userSnapshot.docs) {
+            const data = doc?.data() as CollectionInterface;
 
-          if (data?.email === user?.email) {
-            setUser(prev => ({
-              ...prev,
-              currentUser: data,
-              isUserLoading: false,
-            }));
+            if (data?.email === user?.email) {
+              setUser(prev => ({
+                ...prev,
+                currentUser: data,
+                isUserLoading: false,
+              }));
 
-            return;
+              return;
+            }
           }
+        } else {
+          setUser(prev => ({
+            ...prev,
+            currentUser: null,
+            isUserLoading: false,
+            isAuthError: `User Signed Out`,
+          }));
         }
-      } else {
-        setUser(prev => ({
-          ...prev,
-          currentUser: null,
-          isUserLoading: false,
-          isAuthError: `User Signed Out`,
-        }));
-      }
-    });
+      },
+    );
 
     return unSubscribe;
   }, [setUser]);
@@ -62,8 +59,8 @@ export const useAuthentication = () => {
 export const fetchAllUsers = () => {
   const {setUser} = useUserState();
   useEffect(() => {
-    const listenForChangeUsers = onSnapshot(
-      collection(firestore, usersRoute),
+    const listenForChangeUsers = firebase.onSnapshot(
+      firebase.collection(firebase.firestore, usersRoute),
       snapshot => {
         const allUsers: CollectionInterface[] = [];
         snapshot.forEach(doc => {
@@ -87,15 +84,19 @@ export const fetchAllUsers = () => {
 
 export const updateFaceIdStatus = async (userId: string, publicKey: string) => {
   try {
-    const collectionRef = collection(firestore, usersRoute);
-    const querySnapshot = await getDocs(collectionRef);
+    const collectionRef = firebase.collection(firebase.firestore, usersRoute);
+    const querySnapshot = await firebase.getDocs(collectionRef);
 
     for (const docSnapshot of querySnapshot.docs) {
-      const docRef = doc(firestore, usersRoute, docSnapshot.id);
+      const docRef = firebase.doc(
+        firebase.firestore,
+        usersRoute,
+        docSnapshot.id,
+      );
       const data = docSnapshot.data();
 
       if (data.userId === userId) {
-        await updateDoc(docRef, {
+        await firebase.updateDoc(docRef, {
           faceIdKey: publicKey,
         });
         return;
@@ -111,8 +112,8 @@ export const verifyFaceIdKeyInDatabase = async (
   userId: string,
 ) => {
   try {
-    const collectionRef = collection(firestore, usersRoute);
-    const querySnapshot = await getDocs(collectionRef);
+    const collectionRef = firebase.collection(firebase.firestore, usersRoute);
+    const querySnapshot = await firebase.getDocs(collectionRef);
     for (const docSnapshot of querySnapshot.docs) {
       const data = docSnapshot.data();
 
@@ -145,7 +146,7 @@ const verifySignature = (
     const payloadBuffer = Buffer.from(payload, 'utf8');
     const signatureBuffer = Buffer.from(signatureBase64, 'base64');
 
-    const verify = Crypto.createVerify('sha256');
+    const verify = crypto.createVerify('sha256');
     verify.update(payloadBuffer);
 
     const isValid = verify.verify({key: publicKeyPem}, signatureBuffer);

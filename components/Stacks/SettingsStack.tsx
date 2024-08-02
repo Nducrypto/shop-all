@@ -6,11 +6,9 @@ import Settings from '../Settings/Settings';
 import UserAgreement from '../User-Agreement/UserAgreement';
 import {Cart, Chat, Navbar, ComingSoon, PrivacyPolicy, About} from '../index';
 import {screen} from '../../constants/screens';
-import {useUserState} from '../recoilState/userState';
 
 const Tab = createStackNavigator<any>();
 const SettingsStack = () => {
-  const {currentUser} = useUserState();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -47,7 +45,7 @@ const SettingsStack = () => {
       <Tab.Screen
         name={screen.chat}
         options={{
-          title: currentUser?.userName,
+          title: 'Ndubuisi Agbo',
         }}
         component={Chat}
       />

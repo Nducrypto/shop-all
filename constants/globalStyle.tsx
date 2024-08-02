@@ -1,5 +1,3 @@
-import {StyleSheet} from 'react-native';
-
 export default {
   COLORS: {
     DEFAULT: '#DCDCDC',
@@ -16,7 +14,7 @@ export default {
     ACTIVE: '#9C26B0',
     BUTTON_COLOR: '#1FAB13',
     PLACEHOLDER: '#9FA5AA',
-    SWITCH_ON: '#9C26B0',
+    SWITCH_ON: '#1FAB13',
     SWITCH_OFF: '#D4D9DD',
     GRADIENT_START: '#6B24AA',
     GRADIENT_END: '#AC2688',
@@ -29,5 +27,3 @@ export default {
     BLOCK_SHADOW_RADIUS: 2,
   },
 };
-
-const globalStyle = StyleSheet.create({});

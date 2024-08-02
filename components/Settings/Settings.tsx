@@ -16,11 +16,7 @@ import globalStyle from '../../constants/globalStyle';
 import {useUserState} from '../recoilState/userState';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {updateFaceIdStatus} from '../../actions/usersAction';
-import {
-  checkBiometrics,
-  deleteBiometricPublicKey,
-  generateBiometricPublicKey,
-} from '../../constants/biometricsUtils';
+import * as biometric from '../../constants/biometricsUtils';
 
 function Settings() {
   const [switchState, setSwitchState] = useState<Record<string, boolean>>({});
@@ -47,6 +43,26 @@ function Settings() {
     loadSettingsDataFromStorage();
   }, []);
 
+  useEffect(() => {
+    const checkIfBiometricsIsDisbaledAndDeleteKey = async () => {
+      try {
+        const isAvailable = await biometric.checkBiometrics();
+        if (!isAvailable) {
+          const areKeysPresent = await biometric.checkIfBiometricKeysExist();
+
+          if (areKeysPresent) {
+            await disableBiometrics();
+          }
+        }
+        return;
+      } catch (error) {
+        console.error('Error checking or disabling biometrics:', error);
+      }
+    };
+
+    checkIfBiometricsIsDisbaledAndDeleteKey();
+  }, []);
+
   function toggleSwitch(id: string) {
     if (id === 'face') {
       handleFaceIdToggle();
@@ -67,7 +83,7 @@ function Settings() {
     } catch (error) {}
   };
   async function handleFaceIdToggle() {
-    const isAvailable = await checkBiometrics();
+    const isAvailable = await biometric.checkBiometrics();
     if (!isAvailable) {
       Alert.alert(
         'Biometrics Not Enrolled',
@@ -88,27 +104,10 @@ function Settings() {
             onPress: async () => {
               try {
                 if (switchState.face) {
-                  await deleteBiometricPublicKey();
-                  await updateFaceIdStatus(currentUser?.userId ?? '', '');
-                  await AsyncStorage.removeItem('shopeEaseFaceId');
+                  disableBiometrics();
                 } else {
-                  const publicKey = await generateBiometricPublicKey();
-                  await updateFaceIdStatus(
-                    currentUser?.userId ?? '',
-                    publicKey,
-                  );
-                  await AsyncStorage.setItem(
-                    'shopeEaseFaceId',
-                    JSON.stringify({
-                      userId: currentUser?.userId,
-                      key: publicKey,
-                    }),
-                  );
+                  enableBiometrics();
                 }
-                setSwitchState(prev => ({
-                  ...prev,
-                  face: !switchState.face,
-                }));
               } catch (error) {
                 Alert.alert('Failed to update Face ID setting');
               }
@@ -122,6 +121,32 @@ function Settings() {
       );
     }
   }
+
+  async function enableBiometrics() {
+    setSwitchState(prev => ({
+      ...prev,
+      face: true,
+    }));
+    const publicKey = await biometric.generateBiometricPublicKey();
+    await updateFaceIdStatus(currentUser?.userId ?? '', publicKey);
+    await AsyncStorage.setItem(
+      'shopeEaseFaceId',
+      JSON.stringify({
+        userId: currentUser?.userId,
+        key: publicKey,
+      }),
+    );
+  }
+  async function disableBiometrics() {
+    setSwitchState(prev => ({
+      ...prev,
+      face: false,
+    }));
+    await biometric.deleteBiometricPublicKey();
+    await updateFaceIdStatus(currentUser?.userId ?? '', '');
+    AsyncStorage.removeItem('shopeEaseFaceId');
+  }
+
   interface ITEM {
     title: string;
     id: string;

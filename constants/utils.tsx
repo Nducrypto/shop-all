@@ -1,16 +1,10 @@
-import {useState} from 'react';
-import {
-  addDoc,
-  collection,
-  firestore,
-  doc,
-  deleteDoc,
-} from '../components/config/firebase';
+import {Dimensions, StatusBar} from 'react-native';
+import * as firebase from '../components/config/firebase';
 
 export const createInDatabase = async (url: string, requestData: any) => {
   try {
-    const productCollections = collection(firestore, url);
-    const newDocument = await addDoc(productCollections, requestData);
+    const productCollections = firebase.collection(firebase.firestore, url);
+    const newDocument = await firebase.addDoc(productCollections, requestData);
 
     return newDocument.id;
   } catch (error) {
@@ -20,12 +14,10 @@ export const createInDatabase = async (url: string, requestData: any) => {
 
 export const removeInDatabase = async (url: string, docId: string) => {
   try {
-    const productDocumentRef = doc(firestore, url, docId);
-    await deleteDoc(productDocumentRef);
+    const productDocumentRef = firebase.doc(firebase.firestore, url, docId);
+    await firebase.deleteDoc(productDocumentRef);
     return true;
   } catch (error) {
-    console.log(error);
-    // console.log(error.message);
     throw error;
   }
 };
@@ -70,8 +62,6 @@ function merge<T>(
 
   return result.concat(left.slice(leftIndex), right.slice(rightIndex));
 }
-
-import {Dimensions, StatusBar} from 'react-native';
 
 export const StatusHeight = StatusBar.currentHeight;
 export const HeaderHeight = 16 * 3.5 + (StatusHeight || 0);

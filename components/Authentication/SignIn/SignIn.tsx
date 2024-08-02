@@ -126,14 +126,12 @@ const SignIn = () => {
       //   authToken,
       //   authTokenSecret,
       // );
-      // console.log('twitterCredential: ', twitterCredential);
+      //
       // Sign-in with the credential
       // await signInWithCredential(auth, twitterCredential);
       // You can get user details from the result
-      // console.log('User Info:', autcurrentUser);
-    } catch (error) {
-      console.error('Error signing in with Twitter:', error);
-    }
+      //
+    } catch (error) {}
   };
 
   if (currentUser && currentUser?.email && !isUserLoading) {
@@ -157,7 +155,7 @@ const SignIn = () => {
           size={50}
           onPress={signInWithTwitter}
         />
-        <Entypo name="facebook-with-circle" color="#EA4C89" size={50} />
+        <Entypo name="dribbble-with-circle" color="#EA4C89" size={50} />
       </View>
       <Text style={styles.sharedCon}>or be classical</Text>
       {loading && <ActivityIndicator />}
@@ -199,7 +197,9 @@ const SignIn = () => {
       </View>
 
       <View>
-        <Text style={styles.forgPass} onPress={() => {}}>
+        <Text
+          style={styles.forgPass}
+          onPress={() => navigation.navigate(screen.forgotPassword)}>
           Forgot your password ?{' '}
         </Text>
       </View>

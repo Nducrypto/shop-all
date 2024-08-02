@@ -18,23 +18,23 @@ export interface CartItem {
 }
 
 export interface CartState {
-  usersCarts: Record<string, CartItem>;
   itemsInCart: Record<string, CartItem>;
   subTotal: number;
+  savedForLaterItems: CartItem[];
 }
 
 export const cartState = atom<CartState>({
   key: 'cartKey',
   default: {
-    usersCarts: {},
     itemsInCart: {},
     subTotal: 0,
+    savedForLaterItems: [],
   },
 });
 
 export const useCartState = () => {
   const [cart, setCart] = useRecoilState(cartState);
-  const {itemsInCart, subTotal} = cart;
+  const {itemsInCart, subTotal, savedForLaterItems} = cart;
   const cartItems = Object.values(itemsInCart);
   useEffect(() => {
     const loadCartStateFromStorage = async () => {
@@ -45,12 +45,10 @@ export const useCartState = () => {
           const parsedCartState = JSON.parse(storedCartState);
           setCart(parsedCartState);
         }
-      } catch (error) {
-        console.error('Error loading cart state from AsyncStorage:', error);
-      }
+      } catch (error) {}
     };
 
     loadCartStateFromStorage();
   }, []);
-  return {cartItems, subTotal, setCart};
+  return {cartItems, subTotal, setCart, savedForLaterItems};
 };

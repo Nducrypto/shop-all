@@ -38,7 +38,7 @@ export const createOrder = async (
       });
       clearCartInDatabase(setCart, setSnackBar);
       snackBarSuccess('Order placed successfully', 'success', setSnackBar);
-      navigate(screen.homeStack);
+      navigate(screen.productList);
     }
   } catch (error) {
     snackBarFailure('Failed to place order', 'error', setSnackBar);

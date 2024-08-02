@@ -1,18 +1,6 @@
 import React, {useRef, useState} from 'react';
-import {
-  ScrollView,
-  Image,
-  View,
-  TouchableWithoutFeedback,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
-import {
-  addProductToCart,
-  clearCartInDatabase,
-  incrementQuantityInDatabase,
-  removeCartItem,
-} from '../../actions/cartAction';
+import {ScrollView, Image, View, Text, TouchableOpacity} from 'react-native';
+import * as cartAction from '../../actions/cartAction';
 import {useNavigation} from '@react-navigation/native';
 import {styles} from './cartStyle';
 import {Paystack, paystackProps} from 'react-native-paystack-webview';
@@ -27,12 +15,13 @@ import {useSnackBarState} from '../recoilState/snacbarState';
 import {createOrder} from '../../actions/orderActions';
 import {useOrderState} from '../recoilState/orderState';
 import {ProductInterface} from '../recoilState/productState';
-
 import {PAYSTACK_TEST_PUBLIC_KEY} from '@env';
 import {useProductState} from '../recoilState/productState';
 import DataLoader from '../DataLoader/DataLoader';
 import {width} from '../../constants/utils';
 import {screen} from '../../constants/screens';
+import SavedForLater from './SavedForLater';
+import ShoppedByOthers from './ShoppedByOthers';
 
 export interface Data {
   email: string;
@@ -45,11 +34,12 @@ export interface Data {
 
 const Cart = () => {
   const [quantity, setQuantity] = useState<string | number>(1);
+  const [isSaveForLeterOpen, setIsSaveForLeterOpen] = useState<boolean>(false);
   const paystackKey = PAYSTACK_TEST_PUBLIC_KEY;
   const paystackWebViewRef = useRef<paystackProps.PayStackRef | any>();
   const navigation = useNavigation<any>();
   const {currentUser} = useUserState();
-  const {cartItems, subTotal, setCart} = useCartState();
+  const {cartItems, savedForLaterItems, subTotal, setCart} = useCartState();
   const {allProducts} = useProductState();
   const {setSnackBar} = useSnackBarState();
   const {setOrders, isOrderLoading} = useOrderState();
@@ -59,8 +49,13 @@ const Cart = () => {
     value: number | string,
     item: any,
   ) => {
-    await setQuantity(value);
-    incrementQuantityInDatabase(item, Number(value), setCart, setSnackBar);
+    setQuantity(value);
+    cartAction.incrementQuantityInDatabase(
+      item,
+      Number(value),
+      setCart,
+      setSnackBar,
+    );
   };
 
   const itemsShoppedByOthers = cartItems.length
@@ -69,6 +64,9 @@ const Cart = () => {
           product =>
             !cartItems.some(
               cartItem => cartItem.productId === product.productId,
+            ) &&
+            !savedForLaterItems.some(
+              savedItem => savedItem.productId === product.productId,
             ),
         )
         .slice(0, 8)
@@ -86,7 +84,21 @@ const Cart = () => {
       date: new Date().toString(),
       selectedSize: 'M',
     };
-    addProductToCart(data, setCart, setSnackBar);
+    cartAction.addProductToCart(data, setCart, setSnackBar);
+  }
+  function handleSaveForLeter(product: CartItem) {
+    const quantity = 1;
+    let totalPrice = product?.price * quantity;
+    const data = {
+      ...product,
+      quantity,
+      totalPrice: totalPrice,
+      discountedPrice: null,
+      likes: null,
+      date: new Date().toString(),
+      selectedSize: 'M',
+    };
+    cartAction.saveProductForLeter(data, setCart, setSnackBar);
   }
   async function handlePaymentSuccess(reference: any) {
     const data: Data = {
@@ -103,17 +115,45 @@ const Cart = () => {
   function handlePaystackCloseAction() {}
 
   function handleRemoveItem(product: CartItem) {
-    removeCartItem(product, setCart, setSnackBar);
+    cartAction.removeCartItem(product, setCart, setSnackBar);
   }
 
   const numberOfItemsInCart = cartItems.length;
 
-  function CheckoutButton({id}: {id: string}) {
+  if (!numberOfItemsInCart && savedForLaterItems.length > 0) {
+    return (
+      <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+        <Text
+          style={{
+            fontSize: 14,
+            color: 'black',
+            fontWeight: '600',
+            padding: 12,
+          }}>
+          There are no items in your cart right now. However, you can check out
+          the items you’ve saved for later below.
+        </Text>
+        <CustomButton
+          title="VIEW"
+          width={width / 2}
+          marginTop={15}
+          testID="saved-for-later-modal-opener"
+          onPress={() => setIsSaveForLeterOpen(true)}
+        />
+        <SavedForLater
+          modalStatus={isSaveForLeterOpen}
+          setModalStatus={setIsSaveForLeterOpen}
+        />
+      </View>
+    );
+  }
+
+  function CheckoutButton({testID}: {testID: string}) {
     return (
       <View>
         <Paystack
           paystackKey={paystackKey}
-          billingEmail={currentUser?.email || ''}
+          billingEmail={currentUser?.email ?? ''}
           amount={subTotal}
           currency="NGN"
           onCancel={handlePaystackCloseAction}
@@ -127,7 +167,7 @@ const Cart = () => {
           }
           width="100%"
           marginTop={15}
-          testID={id}
+          testID={testID}
           onPress={() =>
             currentUser?.email
               ? paystackWebViewRef?.current?.startTransaction()
@@ -154,7 +194,14 @@ const Cart = () => {
               ${Intl.NumberFormat().format(subTotal)}
             </Text>
           </View>
-          <CheckoutButton id="top-checkout-button" />
+          <CheckoutButton testID="top-checkout-button" />
+          {savedForLaterItems.length > 0 && (
+            <TouchableOpacity
+              onPress={() => setIsSaveForLeterOpen(prev => !prev)}>
+              <Text style={styles.viewSavedItemtext}>view saved items</Text>
+            </TouchableOpacity>
+          )}
+
           <View style={styles.itemCon}>
             {cartItems.map((item, index) => (
               <View key={index} style={{marginVertical: 20}}>
@@ -162,7 +209,7 @@ const Cart = () => {
                   <View>
                     <View style={styles.imgAndTextCon}>
                       <View>
-                        <View style={[styles.imageContainer, styles.shadow]}>
+                        <View style={[styles.imageContainer]}>
                           <Image
                             source={{uri: item.image[0]}}
                             style={[styles.image]}
@@ -218,7 +265,8 @@ const Cart = () => {
                           shadowless
                           color={globalStyle.COLORS.DEFAULT}
                           textStyle={styles.optionsText}
-                          style={[styles.optionsButton]}>
+                          style={[styles.optionsButton]}
+                          onPress={() => handleSaveForLeter(item)}>
                           SAVE FOR LATER
                         </Button>
                       </View>
@@ -229,73 +277,19 @@ const Cart = () => {
             ))}
           </View>
 
-          <View style={{marginBottom: 50}}>
-            <Text style={{fontSize: 16, fontWeight: 'bold'}}>
-              Customers who shopped for items in your cart also shopped for:
-            </Text>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                gap: 10,
-                minWidth: width,
-              }}>
-              {itemsShoppedByOthers.map((item, index) => (
-                <View key={index} style={{marginTop: 30}}>
-                  <Card minHeight={194} maxWidth={width / 2.6} paddingLeft={4}>
-                    <TouchableWithoutFeedback
-                      onPress={() =>
-                        navigation.navigate('ProductDetail', {
-                          ...item,
-                        })
-                      }>
-                      <View>
-                        <View style={[styles.imageContainer, styles.shadow]}>
-                          <Image
-                            source={{uri: item.image[0]}}
-                            style={[styles.image, {width: width / 3}]}
-                          />
-                        </View>
-                        <View>
-                          <View
-                            style={{
-                              ...styles.productDescription,
-                              paddingHorizontal: 8,
-                            }}>
-                            <Text style={styles.productTitle} numberOfLines={2}>
-                              {item.title}
-                            </Text>
-                            <View>
-                              <Text
-                                style={{
-                                  color: globalStyle.COLORS.GRADIENT_START,
-                                }}>
-                                ${Intl.NumberFormat().format(item?.price)}
-                              </Text>
-                            </View>
-                          </View>
-                        </View>
-                      </View>
-                    </TouchableWithoutFeedback>
-                  </Card>
-                  <View>
-                    <CustomButton
-                      marginTop={9}
-                      title="ADD TO CART"
-                      width="100%"
-                      testID={`add-to-cart-button${index}`}
-                      onPress={() => handleAddToCart(item)}
-                    />
-                  </View>
-                </View>
-              ))}
-            </ScrollView>
-          </View>
+          <ShoppedByOthers
+            products={itemsShoppedByOthers}
+            addToCart={handleAddToCart}
+          />
         </ScrollView>
         <View style={{marginTop: -25}}>
-          <CheckoutButton id="bottom-checkout-button" />
+          <CheckoutButton testID="bottom-checkout-button" />
         </View>
       </View>
+      <SavedForLater
+        modalStatus={isSaveForLeterOpen}
+        setModalStatus={setIsSaveForLeterOpen}
+      />
     </DataLoader>
   );
 };

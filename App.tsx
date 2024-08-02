@@ -42,13 +42,13 @@ function App(): React.JSX.Element {
   };
 
   return (
-    <GalioProvider theme={globalStyle}>
-      <SafeAreaProvider>
-        <StatusBar
-          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-          backgroundColor={backgroundStyle.backgroundColor}
-        />
-        <RecoilRoot>
+    <SafeAreaProvider>
+      <RecoilRoot>
+        <GalioProvider theme={globalStyle}>
+          <StatusBar
+            barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+            backgroundColor={backgroundStyle.backgroundColor}
+          />
           <NavigationContainer>
             <Drawer.Navigator
               drawerContent={props => <CustomDrawerContent {...props} />}
@@ -89,9 +89,9 @@ function App(): React.JSX.Element {
             </Drawer.Navigator>
           </NavigationContainer>
           <CustomToast />
-        </RecoilRoot>
-      </SafeAreaProvider>
-    </GalioProvider>
+        </GalioProvider>
+      </RecoilRoot>
+    </SafeAreaProvider>
   );
 }
 

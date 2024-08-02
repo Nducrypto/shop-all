@@ -26,6 +26,7 @@ const NavbarIcons = ({search}: {search?: boolean}) => {
     screen.cart,
     screen.productList,
     screen.settingsStack,
+    screen.chat,
   ];
 
   useEffect(() => {

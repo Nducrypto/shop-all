@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     width: width,
+    paddingBottom: 70,
   },
   search: {
     height: 48,

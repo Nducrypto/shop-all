@@ -85,6 +85,53 @@ export const removeCartItem = async (
   }
 };
 
+export const saveProductForLeter = async (
+  product: any,
+  setCart: any,
+  setSnackBar: any,
+) => {
+  try {
+    removeCartItem(product, setCart, '');
+    setCart((prev: CartState) => {
+      const newState = {...prev};
+      newState.savedForLaterItems = [...newState.savedForLaterItems, product];
+
+      updateStateInStorage(newState);
+
+      return newState;
+    });
+    snackBarSuccess('Product saved successfully', 'success', setSnackBar);
+  } catch (error) {
+    snackBarFailure('Failed to add product to cart', 'error', setSnackBar);
+  }
+};
+
+export const manageSavedProduct = async (
+  product: any,
+  setCart: (value: any) => void,
+  setSnackBar: (value: any) => void,
+  type: string,
+) => {
+  const isDelete = type === 'delete';
+  try {
+    const {productId} = product;
+
+    setCart((prev: CartState) => {
+      const newState = {...prev};
+      newState.savedForLaterItems = newState.savedForLaterItems.filter(
+        item => item.productId !== productId,
+      );
+
+      isDelete && updateStateInStorage(newState);
+      return newState;
+    });
+    !isDelete && addProductToCart(product, setCart, '');
+  } catch (error) {
+    snackBarFailure('failed to remove product', 'error', setSnackBar);
+    throw Error();
+  }
+};
+
 export async function clearCartInDatabase(setCart: any, setSnackBar: any) {
   try {
     setCart((prev: CartState) => ({
@@ -107,7 +154,6 @@ async function updateStateInStorage(newState: CartState) {
     throw new Error('failed to update in storage');
   }
 }
-
 async function clearCartFromStorage() {
   try {
     await AsyncStorage.removeItem('cartKey');

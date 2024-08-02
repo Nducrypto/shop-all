@@ -8,6 +8,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import globalStyle from '../../constants/globalStyle';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {useAuthentication} from '../../actions/usersAction';
 import {useUserState} from '../recoilState/userState';
@@ -82,9 +83,9 @@ const CustomDrawerContent = (props: any) => {
     },
     {
       label: 'Kids',
-      icon: 'menu',
+      icon: 'users',
       screen: screen.search,
-      IconType: Entypo,
+      IconType: Feather,
     },
     ...(currentUser && currentUser?.email
       ? [
@@ -219,7 +220,7 @@ const CustomDrawerContent = (props: any) => {
             <TouchableOpacity
               style={styles.authBut}
               onPress={() => handleNavigation(screen.signIn, 'Home')}>
-              <Entypo name="menu" size={20} color="grey" />
+              <MaterialCommunityIcons name="import" size={22} color="grey" />
               <Text style={styles.authText}>Sign In</Text>
             </TouchableOpacity>
             <TouchableOpacity

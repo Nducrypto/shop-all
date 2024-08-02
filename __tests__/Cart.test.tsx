@@ -24,6 +24,10 @@ jest.mock('../components/recoilState/cartState', () => ({
       {title: 'Sample Product', image: [image], price: 5000},
       {title: 'Sample', image: [image]},
     ],
+    savedForLaterItems: [
+      {title: 'Sample Product', image: [image], price: 5000},
+      {title: 'Sample', image: [image]},
+    ],
     subTotal: 500,
   })),
 }));
@@ -76,7 +80,7 @@ describe('Cart Component', () => {
       fireEvent.press(getByTestId('top-checkout-button'));
     });
     expect(mockNavigate).toHaveBeenCalled();
-    expect(mockNavigate).toHaveBeenCalledWith('Sign-In');
+    expect(mockNavigate).toHaveBeenCalledWith('SignIn');
   });
 
   it('should display a "Proceed to Checkout" button when there is a logged-in user', async () => {
@@ -113,10 +117,29 @@ describe('Cart Component', () => {
 
   it('should render an empty cart message when there are no items in the cart', () => {
     (useCartState as jest.Mock).mockReturnValue({
+      ...useCartState(),
       cartItems: [],
+      savedForLaterItems: [],
     });
 
     const {getByText} = render(<Cart />);
     expect(getByText('Empty')).toBeTruthy();
+  });
+
+  it('should render a message when there are no items in the cart for there are items saved for later', () => {
+    (useCartState as jest.Mock).mockReturnValue({
+      ...useCartState(),
+      cartItems: [],
+      savedForLaterItems: [
+        {title: 'Sample Product', image: [image], price: 5000},
+      ],
+    });
+
+    const {getByText} = render(<Cart />);
+    expect(
+      getByText(
+        'There are no items in your cart right now. However, you can check out the items you’ve saved for later below.',
+      ),
+    ).toBeTruthy();
   });
 });

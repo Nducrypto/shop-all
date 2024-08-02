@@ -42,7 +42,9 @@ const Profile = () => {
   const totalOrders = userOrdersHistory(currentUser?.email || '').length;
 
   const unreadMessageLength = extractUnreadMessage.length;
-
+  function handleNavigation(screenName: string) {
+    navigation.navigate(screenName);
+  }
   return (
     <View style={styles.profile}>
       <View>
@@ -97,7 +99,8 @@ const Profile = () => {
 
       <View style={styles.options}>
         <View style={styles.labelSection}>
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() => handleNavigation(screen.orders)}>
             <View style={styles.labelCon}>
               <Text style={styles.value}>{totalOrders}</Text>
               <Text style={styles.label}>Orders</Text>
