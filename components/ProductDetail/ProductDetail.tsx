@@ -25,12 +25,10 @@ import {screen} from '../../constants/screens';
 const ProductDetail = () => {
   const [selectedSize, setSelectedSize] = useState<string>('2XL');
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-
   const navigation = useNavigation<any>();
   const {params} = useRoute();
   const product = params as ProductInterface;
-
-  const {cartItems, setCart} = useCartState();
+  const {cartItems, setCart, savedForLaterItems} = useCartState();
   const {setSnackBar} = useSnackBarState();
 
   function handleAddToCart() {
@@ -53,9 +51,9 @@ const ProductDetail = () => {
   }
 
   function isItemInCart() {
-    const foundItem = cartItems.find(
-      data => data.productId === product?.productId,
-    );
+    const foundItem =
+      cartItems.find(data => data.productId === product?.productId) ||
+      savedForLaterItems.find(data => data.productId === product?.productId);
 
     return !!foundItem;
   }

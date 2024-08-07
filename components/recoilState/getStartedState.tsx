@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getStartedStorageKey} from '../../constants/utils';
 import {useEffect} from 'react';
 
 import {atom, useRecoilState} from 'recoil';
@@ -21,7 +22,7 @@ export function useGetStarted() {
   useEffect(() => {
     const loadCartStateFromStorage = async () => {
       try {
-        const hasVisited = await AsyncStorage.getItem('getStarted');
+        const hasVisited = await AsyncStorage.getItem(getStartedStorageKey);
 
         if (hasVisited === null) {
           setGetStarted((prev: GetStarted) => ({

@@ -74,18 +74,16 @@ const SignUp = () => {
   return (
     <View style={styles.signupContainer}>
       <StatusBar barStyle="light-content" backgroundColor="black" />
-
       <View style={styles.iconsCon}>
         <Entypo
           name="facebook-with-circle"
-          color="#3B5998"
+          color="blue"
           size={50}
           onPress={handleFaceebokSignIn}
         />
         <Entypo name="twitter-with-circle" color="#5BC0DE" size={50} />
         <Entypo name="dribbble-with-circle" color="#EA4C89" size={50} />
       </View>
-      {loading && <ActivityIndicator />}
       <View style={styles.sharedCon}>
         <Text style={{textAlign: 'center', color: 'white', fontSize: 16}}>
           or be classical
@@ -110,15 +108,13 @@ const SignUp = () => {
         />
 
         <View style={styles.sharedCon}>
-          {!loading && (
-            <CustomButton
-              title="SIGN UP"
-              width="100%"
-              onPress={() => handleSignupWithEmail()}
-              testID="sign-up-button"
-              disabled={!userName || !email || !password}
-            />
-          )}
+          <CustomButton
+            title={loading ? <ActivityIndicator color="white" /> : 'SIGN UP'}
+            width="100%"
+            onPress={() => handleSignupWithEmail()}
+            testID="sign-up-button"
+            disabled={!userName || !email || !password || loading}
+          />
         </View>
       </View>
 

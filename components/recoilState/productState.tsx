@@ -20,6 +20,9 @@ export interface AllProductState {
   isProductError: boolean;
   currentId: string;
   uniqueSubCategory: Record<string, ProductInterface[]>;
+  uniqueTypeDataArray: ProductInterface[];
+
+  uniqueCategoriesTitleArray: string[];
 }
 
 export const productState = atom<AllProductState>({
@@ -30,6 +33,8 @@ export const productState = atom<AllProductState>({
     isProductLoading: false,
     isProductError: false,
     currentId: '',
+    uniqueTypeDataArray: [],
+    uniqueCategoriesTitleArray: [],
   },
 });
 
@@ -41,19 +46,9 @@ export const useProductState = () => {
     isProductError,
     currentId,
     uniqueSubCategory,
+    uniqueTypeDataArray,
+    uniqueCategoriesTitleArray,
   } = product;
-
-  const uniqueCaTegories: Set<string | any> = new Set(['POPULAR']);
-  const uniqueCaTegoriesDataArray = [];
-
-  for (const item of allProducts) {
-    if (!uniqueCaTegories.has(item?.category) && item.category !== 'All') {
-      uniqueCaTegories.add(item.category);
-      uniqueCaTegoriesDataArray.push(item);
-    }
-  }
-
-  const uniqueCategoriesTitleArray = Array.from(uniqueCaTegories);
 
   return {
     allProducts,
@@ -63,7 +58,7 @@ export const useProductState = () => {
     setProduct,
     uniqueSubCategory,
     uniqueCategoriesTitleArray,
-    uniqueCaTegoriesDataArray,
+    uniqueTypeDataArray,
   };
 };
 

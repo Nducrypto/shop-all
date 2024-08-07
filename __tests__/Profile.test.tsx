@@ -22,6 +22,20 @@ jest.mock('../components/recoilState/productState', () => ({
     isProductLoading: false,
   })),
 }));
+jest.mock('../components/recoilState/globalState', () => ({
+  useGlobalState: jest.fn(() => ({
+    globalState: jest.fn(),
+    recentlyViewed: [
+      {
+        brand: '1',
+        title: 'car',
+        price: '200',
+        category: 'Product 1',
+        image: [image],
+      },
+    ],
+  })),
+}));
 
 jest.mock('../components/recoilState/userState', () => ({
   useUserState: () => ({

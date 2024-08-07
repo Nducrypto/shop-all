@@ -34,7 +34,6 @@ const SettingsStack = () => {
         name={screen.cart}
         options={{
           headerTitle: 'Shopping Cart',
-          headerTransparent: true,
           headerStyle: {
             backgroundColor: 'transparent',
           },

@@ -5,26 +5,50 @@ import {
   View,
   ScrollView,
   ImageBackground,
+  TouchableWithoutFeedback,
 } from 'react-native';
-import {useProductState} from '../../recoilState/productState';
+import {
+  useProductState,
+  ProductInterface,
+} from '../../recoilState/productState';
 import {DataLoader, Card, CustomTitle} from '../../index';
 import {width} from '../../../constants/utils';
+import {useNavigation} from '@react-navigation/native';
+import {NavigationProps, screen} from '../../../constants/screens';
+import {
+  useGlobalState,
+  GlobalStateProps,
+} from '../../../components/recoilState/globalState';
 
 const Categories = () => {
+  const {navigate} = useNavigation<NavigationProps>();
   const {
     allProducts,
     isProductLoading,
     uniqueCategoriesTitleArray,
-    uniqueCaTegoriesDataArray,
+    uniqueTypeDataArray,
   } = useProductState();
   const firstElement = uniqueCategoriesTitleArray[0];
   const [selectedTitle, setSelectedTitle] = useState<string>(firstElement);
+  const {setGlobalState} = useGlobalState();
 
+  const handleNavigation = (item: ProductInterface) => {
+    const {category, type} = item;
+    const isCategoryAll = category === 'All';
+    setGlobalState((prev: GlobalStateProps) => ({
+      ...prev,
+      searchTitle: isCategoryAll ? 'Unisex' : category,
+    }));
+    navigate(screen.search, {
+      type: type,
+      category: category,
+    });
+  };
   const filteredArray =
     selectedTitle === firstElement
-      ? uniqueCaTegoriesDataArray
-      : uniqueCaTegoriesDataArray.filter(
-          item => item.category === selectedTitle,
+      ? uniqueTypeDataArray
+      : uniqueTypeDataArray.filter(
+          item => item.category.toLowerCase() === selectedTitle.toLowerCase(),
         );
 
   return (
@@ -44,8 +68,10 @@ const Categories = () => {
           contentContainerStyle={styles.products}>
           <View>
             {filteredArray.map((item, index) => (
-              <View key={index} style={{marginTop: 30}}>
-                {item.category !== 'All' && (
+              <TouchableWithoutFeedback
+                key={index}
+                onPress={() => handleNavigation(item)}>
+                <View style={{marginTop: 30}}>
                   <Card minHeight={234} maxWidth={430}>
                     <ImageBackground
                       source={{
@@ -54,12 +80,12 @@ const Categories = () => {
                       style={styles.background}
                       resizeMode="cover">
                       <View style={styles.container}>
-                        <Text style={styles.text}>{item.category}</Text>
+                        <Text style={styles.text}>{item.type}</Text>
                       </View>
                     </ImageBackground>
                   </Card>
-                )}
-              </View>
+                </View>
+              </TouchableWithoutFeedback>
             ))}
           </View>
         </ScrollView>
@@ -94,6 +120,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
+    textTransform: 'capitalize',
   },
   products: {
     width: width - 16 * 2,

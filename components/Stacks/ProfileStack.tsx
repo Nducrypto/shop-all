@@ -8,11 +8,15 @@ import {
   Chat,
   Profile,
   Order,
+  Search,
 } from '../index';
 import {screen} from '../../constants/screens';
+import {useGlobalState} from '../../components/recoilState/globalState';
 
 const Tab = createStackNavigator<any>();
 const ProfileStack = () => {
+  const {searchTitle} = useGlobalState();
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -31,7 +35,6 @@ const ProfileStack = () => {
         }}
         component={Profile}
       />
-
       <Tab.Screen
         name={screen.productDetail}
         options={{
@@ -57,13 +60,20 @@ const ProfileStack = () => {
         name={screen.cart}
         options={{
           headerTitle: 'Shopping Cart',
-          headerTransparent: true,
           headerStyle: {
             backgroundColor: 'transparent',
           },
           headerTintColor: 'black',
         }}
         component={Cart}
+      />
+      <Tab.Screen
+        name={screen.search}
+        options={{
+          title: searchTitle,
+          headerRight: () => <Navbar />,
+        }}
+        component={Search}
       />
     </Tab.Navigator>
   );

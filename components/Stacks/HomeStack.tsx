@@ -16,14 +16,12 @@ import {
 } from '../index';
 import ProductList from '../ProductsList/ProductList';
 import {useGetStarted} from '../recoilState/getStartedState';
-import {useAuthentication} from '../../actions/usersAction';
 import {screen} from '../../constants/screens';
 import {useGlobalState} from '../../components/recoilState/globalState';
 
 const Tab = createStackNavigator();
 
 const HomeStack = () => {
-  useAuthentication();
   const {hasUserVisitedBefore} = useGetStarted();
   const {searchTitle} = useGlobalState();
   const defaultScreenOptions = {

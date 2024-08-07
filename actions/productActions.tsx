@@ -22,8 +22,8 @@ import {PRODUCTS} from '@env';
 const productRoute = PRODUCTS;
 export const addProduct = async (
   newProduct: ProductInterface,
-  setProduct: any,
-  setSnackBar: any,
+  setProduct: (value: any) => void,
+  setSnackBar: (value: any) => void,
 ) => {
   setProduct((prevState: AllProductState) => ({
     ...prevState,
@@ -63,7 +63,10 @@ export const fetchAllProducts = () => {
       collection(firestore, productRoute),
       snapshot => {
         const fetchedData: ProductInterface[] = [];
+        const uniqueCaTegories: Set<string | any> = new Set(['POPULAR']);
         const groupBySubCategories: Record<string, ProductInterface[]> = {};
+        const uniqueType: Set<string | any> = new Set();
+        const uniqueTypeDataArray: ProductInterface[] = [];
 
         snapshot.forEach(doc => {
           const product = {
@@ -75,13 +78,24 @@ export const fetchAllProducts = () => {
             groupBySubCategories[product.subCategory] = [];
           }
           groupBySubCategories[product.subCategory].push(product);
+          if (!uniqueType.has(product?.type)) {
+            uniqueType.add(product.type);
+            uniqueTypeDataArray.push(product);
+          }
+          if (
+            !uniqueCaTegories.has(product?.category) &&
+            product.category !== 'All'
+          ) {
+            uniqueCaTegories.add(product.category);
+          }
         });
 
         setProduct(prevState => ({
           ...prevState,
           allProducts: [...fetchedData],
           uniqueSubCategory: groupBySubCategories,
-
+          uniqueTypeDataArray,
+          uniqueCategoriesTitleArray: Array.from(uniqueCaTegories),
           isProductLoading: false,
         }));
       },
@@ -90,7 +104,7 @@ export const fetchAllProducts = () => {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [setProduct]);
 };
 export const updateProduct = async (
   productId: string,
@@ -161,9 +175,7 @@ const updateProductAll = async () => {
         await updateDoc(docRef, {
           subCategory: 'Phone',
         });
-        console.log(`Document with ID Oraimo has been updated`);
       }
-      console.log(`Document with ID Oraimo has been updated`);
     });
   } catch (error) {}
 };

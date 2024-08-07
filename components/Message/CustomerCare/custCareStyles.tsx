@@ -1,3 +1,5 @@
+import {width} from '../../../constants/utils';
+import globalStyle from '../../../constants/globalStyle';
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
@@ -5,13 +7,16 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    backgroundColor: '#007bff',
+    backgroundColor: globalStyle.COLORS.DARKGREEN,
     padding: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   headerText: {
     color: 'white',
     textAlign: 'center',
     fontWeight: 'bold',
+    fontSize: 16,
   },
 
   content: {
@@ -23,12 +28,10 @@ export const styles = StyleSheet.create({
     marginBottom: 40,
   },
   selected: {
-    // textDecorationLine: "blue",
-    // marginTop: 15,
-    // flexDirection: "row",
-    // justifyContent: "space-around",
-    // borderColor: "grey",
-    // borderWidth: 2,
+    marginTop: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: 'lightgrey',
   },
   notSelected: {
     marginTop: 15,
@@ -37,6 +40,7 @@ export const styles = StyleSheet.create({
   },
   email: {
     fontSize: 18,
+    color: 'black',
   },
   messagesContainer: {
     marginBottom: 50,
@@ -46,27 +50,39 @@ export const styles = StyleSheet.create({
     marginVertical: 6,
     maxWidth: '70%',
     borderRadius: 8,
+    backgroundColor: 'white',
+    alignSelf: 'flex-start',
   },
   messageRole: {
     color: 'white',
   },
   messageText: {
-    color: 'white',
+    color: 'black',
+  },
+  messageDate: {
+    color: 'black',
+    paddingVertical: 2,
+    fontSize: 10,
+    fontWeight: '200',
+    textAlign: 'right',
   },
   messageStatus: {
     alignSelf: 'flex-end',
   },
+
   messageInput: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 8,
-    backgroundColor: 'white',
   },
   input: {
-    flex: 1,
+    width: width / 1.3,
+    marginLeft: 15,
     padding: 8,
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 4,
+    color: 'black',
+    backgroundColor: 'white',
   },
 });

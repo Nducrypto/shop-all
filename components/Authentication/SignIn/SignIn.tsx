@@ -23,14 +23,6 @@ import {
 } from '../../../constants/biometricsUtils';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
-// import {TwitterLogin} from 'react-native-login-twitter';
-// import TwitterSignin from 'react-native-login-twitter';
-
-// Initialize Twitter SDK with API Key and API Secret Key
-// TwitterSignin.init(
-//   'xuclCSBOouklC619U57TfUfbj',
-//   'JHRJlO2jjjUmWFspBd2PyKDpix3OkKb7UKZ7u4cpRwgwcILiZo',
-// );
 
 const SignIn = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -115,25 +107,6 @@ const SignIn = () => {
     }
   }
 
-  const signInWithTwitter = async () => {
-    try {
-      // Start Twitter login process
-      // const authToken = await TwitterLogin.logIn();
-      // const {authToken, authTokenSecret} = await TwitterLogin.logIn();
-      // const {authToken, authTokenSecret} = await TwitterSignin.logIn();
-      // Create a Twitter credential with the token
-      // const twitterCredential = TwitterAuthProvider.credential(
-      //   authToken,
-      //   authTokenSecret,
-      // );
-      //
-      // Sign-in with the credential
-      // await signInWithCredential(auth, twitterCredential);
-      // You can get user details from the result
-      //
-    } catch (error) {}
-  };
-
   if (currentUser && currentUser?.email && !isUserLoading) {
     navigation.navigate(screen.homeStack);
   }
@@ -144,31 +117,18 @@ const SignIn = () => {
       <View style={styles.iconsCon}>
         <Entypo
           name="facebook-with-circle"
-          color="#3B5998"
+          color="blue"
           size={50}
           onPress={handleFaceebokSignIn}
           testID="facebook-login-icon"
         />
-        <Entypo
-          name="twitter-with-circle"
-          color="#5BC0DE"
-          size={50}
-          onPress={signInWithTwitter}
-        />
+        <Entypo name="twitter-with-circle" color="#5BC0DE" size={50} />
         <Entypo name="dribbble-with-circle" color="#EA4C89" size={50} />
       </View>
       <Text style={styles.sharedCon}>or be classical</Text>
-      {loading && <ActivityIndicator />}
       {faceIdData.userId && (
         <TouchableOpacity
-          style={{
-            // backgroundColor: 'red',
-            width: 130,
-            alignSelf: 'center',
-            padding: 6,
-            alignItems: 'center',
-            marginTop: 30,
-          }}
+          style={styles.faceIdBtn}
           onPress={handleFaceIdBiometricLogin}>
           <MaterialCommunityIcons
             name="face-recognition"
@@ -176,9 +136,7 @@ const SignIn = () => {
             size={30}
           />
 
-          <Text style={{color: 'white', marginTop: 10}}>
-            Login with face id
-          </Text>
+          <Text style={styles.faceIdText}>Login with face id</Text>
         </TouchableOpacity>
       )}
 
@@ -203,16 +161,16 @@ const SignIn = () => {
           Forgot your password ?{' '}
         </Text>
       </View>
-      {!loading && (
-        <CustomButton
-          title="SIGN IN"
-          width="100%"
-          onPress={() => handleLoginWithEmail()}
-          testID="sign-in-button"
-          marginTop={40}
-          disabled={!email || !password}
-        />
-      )}
+
+      <CustomButton
+        title={loading ? <ActivityIndicator color="white" /> : 'SIGN IN'}
+        width="100%"
+        onPress={() => handleLoginWithEmail()}
+        testID="sign-in-button"
+        marginTop={40}
+        disabled={!email || !password || loading}
+      />
+
       <LinearGradient
         colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']}
         // style={styles.gradient}

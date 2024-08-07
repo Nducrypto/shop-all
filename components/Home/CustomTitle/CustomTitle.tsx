@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     fontWeight: '300',
     fontSize: 16,
+    color: 'black',
   },
   horizontalLine: {
     borderBottomWidth: 2,

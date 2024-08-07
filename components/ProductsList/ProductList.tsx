@@ -13,9 +13,11 @@ import {
   useGlobalState,
   GlobalStateProps,
 } from '../../components/recoilState/globalState';
+import {useAuthentication} from '../../actions/usersAction';
 
 const ProductList = () => {
   fetchAllProducts();
+  useAuthentication();
   const {allProducts, isProductLoading} = useProductState();
   const {setGlobalState} = useGlobalState();
 
@@ -39,6 +41,7 @@ const ProductList = () => {
         <Input
           right
           color="black"
+          placeholderTextColor="grey"
           style={styles.search}
           iconContent={
             <Entypo
@@ -50,8 +53,7 @@ const ProductList = () => {
           }
           testID="input"
           placeholder="What are you looking for?"
-          onFocus={() => navigation.navigate('Search')}
-          // onPress={() => navigation.navigate('Search')}
+          onFocus={handleNavigateToSearch}
         />
       </View>
     );

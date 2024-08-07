@@ -5,10 +5,10 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
+  StyleSheet,
 } from 'react-native';
 import Products from '../../ProductsList/Product';
 import {
@@ -17,6 +17,8 @@ import {
   useProductState,
 } from '../../recoilState/productState';
 import {useSnackBarState} from '../../recoilState/snacbarState';
+import CustomButton from '../../../components/CustomButton/CustomButton';
+import {width} from '../../../constants/utils';
 
 interface NewProduct {
   title: string;
@@ -103,12 +105,12 @@ const AddProduct = () => {
             </View>
           ))}
         </ScrollView>
-        <Text style={{textAlign: 'center'}}>
+        <Text style={{...styles.label, textAlign: 'center'}}>
           You have {allProducts.length} products in Stock
         </Text>
         <View style={{margin: 20}}>
-          <Text>Add New Product</Text>
-          <Text>Title:</Text>
+          <Text style={styles.label}>Add New Product</Text>
+          <Text style={styles.label}>Title:</Text>
           <TextInput
             style={{
               borderWidth: 1,
@@ -120,7 +122,7 @@ const AddProduct = () => {
             value={productForm.title}
             onChangeText={text => handleNewProductChange('title', text)}
           />
-          <Text>Category:</Text>
+          <Text style={styles.label}>Category:</Text>
           <TextInput
             style={{
               borderWidth: 1,
@@ -132,7 +134,7 @@ const AddProduct = () => {
             value={productForm.category}
             onChangeText={text => handleNewProductChange('category', text)}
           />
-          <Text>Sub Category:</Text>
+          <Text style={styles.label}>Sub Category:</Text>
           <TextInput
             style={{
               borderWidth: 1,
@@ -144,7 +146,7 @@ const AddProduct = () => {
             value={productForm.subCategory}
             onChangeText={text => handleNewProductChange('subCategory', text)}
           />
-          <Text>Type:</Text>
+          <Text style={styles.label}>Type:</Text>
           <TextInput
             style={{
               borderWidth: 1,
@@ -156,7 +158,7 @@ const AddProduct = () => {
             value={productForm.type}
             onChangeText={text => handleNewProductChange('type', text)}
           />
-          <Text>Brand:</Text>
+          <Text style={styles.label}>Brand:</Text>
           <TextInput
             style={{
               borderWidth: 1,
@@ -168,7 +170,7 @@ const AddProduct = () => {
             value={productForm.brand}
             onChangeText={text => handleNewProductChange('brand', text)}
           />
-          <Text>Product Detail:</Text>
+          <Text style={styles.label}>Product Detail:</Text>
           <TextInput
             style={{
               borderWidth: 1,
@@ -182,7 +184,7 @@ const AddProduct = () => {
             onChangeText={text => handleNewProductChange('productDetail', text)}
             multiline
           />
-          <Text>Price:</Text>
+          <Text style={styles.label}>Price:</Text>
           <TextInput
             style={{
               borderWidth: 1,
@@ -195,7 +197,7 @@ const AddProduct = () => {
             onChangeText={value => handleNewProductChange('price', value)}
             keyboardType="numeric"
           />
-          <Text>Discounted Price:</Text>
+          <Text style={styles.label}>Discounted Price:</Text>
           <TextInput
             style={{
               borderWidth: 1,
@@ -210,7 +212,7 @@ const AddProduct = () => {
             }
             keyboardType="numeric"
           />
-          <Text>Image URL:</Text>
+          <Text style={styles.label}>Image URL:</Text>
           <TextInput
             style={{
               borderWidth: 1,
@@ -222,7 +224,15 @@ const AddProduct = () => {
             value={productForm.image.join(', ')}
             onChangeText={text => handleNewProductChange('image', text)}
           />
-          <Button title="Add Product" onPress={createProductHandler} />
+          <View style={styles.btnCon}>
+            <CustomButton
+              title="ADD PRODUCT"
+              width={width / 1.5}
+              marginTop={10}
+              testID="add-product-btn"
+              onPress={() => createProductHandler()}
+            />
+          </View>
         </View>
       </ScrollView>
     </TouchableWithoutFeedback>
@@ -230,3 +240,13 @@ const AddProduct = () => {
 };
 
 export default AddProduct;
+
+const styles = StyleSheet.create({
+  label: {
+    color: 'black',
+    fontSize: 16,
+  },
+  btnCon: {
+    alignItems: 'center',
+  },
+});

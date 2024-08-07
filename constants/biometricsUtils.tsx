@@ -15,10 +15,6 @@ export const checkBiometrics = async () => {
       return false;
     } else if (available && biometryType === BiometryTypes.FaceID) {
       return true;
-    } else if (available && biometryType === BiometryTypes.TouchID) {
-      return true;
-    } else if (available && biometryType === BiometryTypes.Biometrics) {
-      return true;
     } else {
       return false;
     }

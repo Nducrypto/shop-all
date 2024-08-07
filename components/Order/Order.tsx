@@ -54,12 +54,16 @@ const Order = () => {
                     return (
                       <View key={index} style={styles.item}>
                         <Text style={styles.itemText}>Item {index + 1}</Text>
-                        <Text>{item.brand}</Text>
-                        <Text>Model: {item.title}</Text>
+                        <Text style={styles.sharedText}>{item.brand}</Text>
+                        <Text style={styles.sharedText}>
+                          Model: {item.title}
+                        </Text>
                         <Text style={styles.itemPrice}>
                           &#8358; {Intl.NumberFormat().format(item.price)}
                         </Text>
-                        <Text>Quantity: {item.quantity}</Text>
+                        <Text style={styles.sharedText}>
+                          Quantity: {item.quantity}
+                        </Text>
                       </View>
                     );
                   }}
@@ -125,7 +129,7 @@ const styles = StyleSheet.create({
   },
   subtotal: {
     fontWeight: 'bold',
-    color: globalStyle.COLORS.GRADIENT_START,
+    color: 'red',
     fontSize: 18,
   },
   itemsList: {
@@ -147,6 +151,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
+  },
+  sharedText: {
+    color: 'black',
   },
   itemPrice: {
     fontSize: 16,

@@ -9,10 +9,10 @@ const image =
 jest.mock('../components/recoilState/productState', () => ({
   useProductState: jest.fn(() => ({
     allProducts: [],
-    uniqueCaTegoriesDataArray: [
-      {category: 'All', image: [image]},
-      {category: 'Electronics', image: [image]},
-      {category: 'Fashion', image: [image]},
+    uniqueTypeDataArray: [
+      {category: 'All', image: [image], type: 'Shirt'},
+      {category: 'Electronics', image: [image], type: 'Bag'},
+      {category: 'Fashion', image: [image], type: 'Dress'},
     ],
     uniqueCategoriesTitleArray: ['POPULAR', 'MEN', 'WOMEN', 'UNISEX'],
   })),
@@ -20,6 +20,11 @@ jest.mock('../components/recoilState/productState', () => ({
 
 jest.mock('../actions/productActions', () => ({
   fetchAllProducts: jest.fn(),
+}));
+jest.mock('../components/recoilState/globalState', () => ({
+  useGlobalState: jest.fn(() => ({
+    globalState: jest.fn(),
+  })),
 }));
 
 describe('Categories', () => {

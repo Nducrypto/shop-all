@@ -6,7 +6,7 @@ const About = () => {
     <ScrollView
       contentContainerStyle={styles.container}
       showsHorizontalScrollIndicator={false}>
-      <Text>
+      <Text style={styles.text}>
         At Shopease, we are dedicated to transforming your shopping experience.
         Founded with the vision of making online shopping seamless and
         enjoyable, our mission is to provide you with an extensive range of

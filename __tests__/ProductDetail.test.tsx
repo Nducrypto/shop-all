@@ -17,6 +17,7 @@ jest.mock('../components/recoilState/cartState', () => ({
   useCartState: jest.fn(() => ({
     cartItems: [],
     setCart: mockSetCart,
+    savedForLaterItems: [],
   })),
 }));
 
@@ -131,7 +132,9 @@ describe('ProductDetail', () => {
 
   it('shows snackbar when adding product to cart', async () => {
     (useCartState as jest.Mock).mockReturnValue({
+      ...useCartState(),
       cartItems: [],
+      savedForLaterItems: [],
     });
     const {getByTestId} = render(<ProductDetail />);
     act(() => {

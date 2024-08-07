@@ -8,11 +8,10 @@ import {
   Image,
 } from 'react-native';
 import React from 'react';
-import {width} from '../../constants/utils';
+import {height, width} from '../../constants/utils';
 import {styles as cartStyle} from './cartStyle';
 import {CartItem, useCartState} from '../../components/recoilState/cartState';
 import Card from '../../components/Card/Card';
-
 import globalStyle from '../../constants/globalStyle';
 import {useSnackBarState} from '../../components/recoilState/snacbarState';
 import {manageSavedProduct} from '../../actions/cartAction';
@@ -90,7 +89,9 @@ const SavedForLater = ({modalStatus, setModalStatus}: Props) => {
                 CLOSE
               </Text>
             </TouchableOpacity>
-            <ScrollView contentContainerStyle={style.itemCon}>
+            <ScrollView
+              contentContainerStyle={style.itemCon}
+              showsVerticalScrollIndicator={false}>
               <Text style={style.label}>
                 You have {itemCount} {itemLabel} saved for later
               </Text>
@@ -163,20 +164,6 @@ const SavedForLater = ({modalStatus, setModalStatus}: Props) => {
               ))}
             </ScrollView>
           </View>
-
-          <View style={style.closeBtnCon}>
-            {/* <TouchableOpacity
-              testID="close-btn"
-              style={{
-                ...style.button,
-                backgroundColor: globalStyle.COLORS.BUTTON_COLOR,
-              }}
-              onPress={handleCloseModal}>
-              <Text style={[cartStyle.optionsText, {color: 'white'}]}>
-                CLOSE
-              </Text>
-            </TouchableOpacity> */}
-          </View>
         </View>
       </Modal>
     </View>
@@ -188,7 +175,7 @@ export default SavedForLater;
 const style = StyleSheet.create({
   centeredView: {
     flex: 1,
-    backgroundColor: '#ECF3F9',
+    backgroundColor: '#ffffff',
     alignItems: 'center',
     marginTop: 30,
     width,
@@ -203,6 +190,8 @@ const style = StyleSheet.create({
     elevation: 5,
     marginTop: 10,
     paddingBottom: 50,
+    backgroundColor: 'white',
+    height: height,
   },
   closeBtnCon: {
     gap: 10,

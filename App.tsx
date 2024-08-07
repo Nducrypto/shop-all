@@ -24,13 +24,8 @@ import {
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {GalioProvider} from 'galio-framework';
 import globalStyle from './constants/globalStyle';
-
-import {enableScreens} from 'react-native-screens';
 import ProfileStack from './components/Stacks/ProfileStack';
 import {screen} from './constants/screens';
-LogBox.ignoreLogs(['']);
-
-enableScreens();
 
 const Drawer = createDrawerNavigator();
 
@@ -83,6 +78,9 @@ function App(): React.JSX.Element {
               />
               <Drawer.Screen
                 name={screen.customerCare}
+                options={{
+                  title: 'Chat',
+                }}
                 component={CustomerCare}
               />
               <Drawer.Screen name={screen.addProduct} component={AddProduct} />

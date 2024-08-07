@@ -202,6 +202,7 @@ const styles = StyleSheet.create({
   welcomeText: {
     textAlign: 'center',
     marginTop: 100,
+    color: 'black',
   },
   content: {
     flex: 1,

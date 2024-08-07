@@ -66,3 +66,4 @@ function merge<T>(
 export const StatusHeight = StatusBar.currentHeight;
 export const HeaderHeight = 16 * 3.5 + (StatusHeight || 0);
 export const {width, height} = Dimensions.get('screen');
+export const getStartedStorageKey = 'getStarted';

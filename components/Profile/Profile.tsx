@@ -23,14 +23,18 @@ import {
 import {useOrderState, userOrdersHistory} from '../recoilState/orderState';
 import {getAllOrders} from '../../actions/orderActions';
 import {screen} from '../../constants/screens';
+import {useGlobalState} from '../../components/recoilState/globalState';
+import {useAuthentication} from '../../actions/usersAction';
 
 const thumbMeasure = (width - 48 - 32) / 3;
 
 const Profile = () => {
+  useAuthentication();
   getAllOrders();
   const navigation = useNavigation() as any;
-  const {allProducts, isProductLoading} = useProductState();
+  const {isProductLoading} = useProductState();
   const {currentUser} = useUserState();
+  const {recentlyViewed} = useGlobalState();
 
   const {allChat} = useAllChatState();
   const extractUnreadMessage = messageNotificationForCustomer(
@@ -134,27 +138,26 @@ const Profile = () => {
             View All
           </Text>
         </View>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{paddingBottom: HeaderHeight && -HeaderHeight * 2}}>
-            <View style={styles.recentlyViewed}>
-              {allProducts.slice(0, 6).map((item, imgIndex) => (
-                <TouchableWithoutFeedback
-                  onPress={() =>
-                    navigation.navigate(screen.productDetail, {
-                      ...item,
-                    })
-                  }
-                  key={`viewed-${imgIndex}`}>
-                  <Image
-                    source={{uri: item.image[0]}}
-                    resizeMode="cover"
-                    style={styles.thumb}
-                    testID={`index${imgIndex}`}
-                  />
-                </TouchableWithoutFeedback>
-              ))}
-            </View>
-          </View>
+
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.recentlyViewed}>
+          {recentlyViewed.slice(0, 6).map((item, imgIndex) => (
+            <TouchableWithoutFeedback
+              onPress={() =>
+                navigation.navigate(screen.productDetail, {
+                  ...item,
+                })
+              }
+              key={`viewed-${imgIndex}`}>
+              <Image
+                source={{uri: item.image[0]}}
+                resizeMode="cover"
+                style={styles.thumb}
+                testID={`index${imgIndex}`}
+              />
+            </TouchableWithoutFeedback>
+          ))}
         </ScrollView>
       </View>
     </View>
@@ -269,6 +272,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
+    paddingBottom: 120,
   },
 });
 

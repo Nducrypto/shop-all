@@ -9,8 +9,12 @@ const image =
 jest.mock('../components/recoilState/productState', () => ({
   useProductState: jest.fn(() => ({
     allProducts: [{category: 'All', image: [image]}],
-
     uniqueSubCategory: ['POPULAR', 'FASHION', 'CAR', 'PHONE'],
+  })),
+}));
+jest.mock('../components/recoilState/globalState', () => ({
+  useGlobalState: jest.fn(() => ({
+    globalState: jest.fn(),
   })),
 }));
 

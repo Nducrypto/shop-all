@@ -1,10 +1,4 @@
-import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import globalStyle from '../../constants/globalStyle';
 
@@ -30,15 +24,7 @@ const DataLoader = ({size, style, isLoading, children, array}: Props) => {
       ) : isArrayEmpty ? (
         <Text style={styles.text}>Empty</Text>
       ) : (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{
-            padding: 20,
-            alignItems: 'center',
-          }}>
-          <Text>{children}</Text>
-        </ScrollView>
+        <Text>{children}</Text>
       )}
     </View>
   );

@@ -48,6 +48,7 @@ describe('Chat Component', () => {
     (customerSpecificChat as jest.Mock).mockReturnValue([]);
 
     const {getByText} = render(<Chat />);
+
     expect(
       getByText('Hello John Doe! 😊 How can i assist you today?'),
     ).toBeTruthy();
@@ -59,9 +60,9 @@ describe('Chat Component', () => {
     act(() => {
       fireEvent.changeText(getByPlaceholderText('Message'), 'Hello World');
     });
-    act(() => {
-      fireEvent.press(getByTestId('button'));
-    });
+
+    fireEvent.press(getByTestId('button'));
+
     await waitFor(() => {
       expect(createMessage).toHaveBeenCalledTimes(1);
       expect(createMessage).toHaveBeenCalledWith(
@@ -92,19 +93,13 @@ describe('Chat Component', () => {
   it('enables send button only when message is entered', async () => {
     const {getByPlaceholderText, getByTestId} = render(<Chat />);
 
-    act(() => {
-      expect(getByTestId('button').props.accessibilityState.disabled).toBe(
-        true,
-      );
-    });
+    expect(getByTestId('button').props.accessibilityState.disabled).toBe(true);
+
     act(() => {
       fireEvent.changeText(getByPlaceholderText('Message'), 'Hello World');
     });
-    act(() => {
-      expect(getByTestId('button').props.accessibilityState.disabled).toBe(
-        false,
-      );
-    });
+
+    expect(getByTestId('button').props.accessibilityState.disabled).toBe(false);
   });
 
   it('does not render if currentUser email is missing', () => {

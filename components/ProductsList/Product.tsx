@@ -10,19 +10,27 @@ import {
 import {Card} from '../index';
 import {width} from '../../constants/utils';
 import {screen} from '../../constants/screens';
+import {
+  useGlobalState,
+  GlobalStateProps,
+} from '../../components/recoilState/globalState';
+import {ProductInterface} from '../../components/recoilState/productState';
+import globalStyle from '../../constants/globalStyle';
 
 interface Props {
-  product?: any;
-  horizontal?: any;
-  full?: any;
+  product?: ProductInterface;
+  horizontal?: boolean;
+  full?: boolean;
   style?: any;
-  priceColor?: any;
-  imageStyle?: any;
 }
 const Product = ({product, horizontal, full, style}: Props) => {
   const navigation = useNavigation<any>();
-
+  const {setGlobalState} = useGlobalState();
   const proceedToProductDetail = () => {
+    setGlobalState((prev: GlobalStateProps | any) => ({
+      ...prev,
+      recentlyViewed: [...prev.recentlyViewed, product],
+    }));
     navigation.navigate(screen.productDetail, {
       ...product,
     });
@@ -42,12 +50,11 @@ const Product = ({product, horizontal, full, style}: Props) => {
         <View
           style={[
             {...styles.product, flexDirection: horizontal ? 'row' : 'column'},
-            styles.shadow,
           ]}>
           <TouchableWithoutFeedback
             onPress={proceedToProductDetail}
             testID="proceed-to-product-detail-button">
-            <View style={[styles.imageContainer, styles.shadow]}>
+            <View style={styles.imageContainer}>
               <Image source={{uri: product?.image[0]}} style={imageStyles} />
             </View>
           </TouchableWithoutFeedback>
@@ -66,14 +73,14 @@ const Product = ({product, horizontal, full, style}: Props) => {
               <Text
                 style={{
                   fontSize: 14,
-                  color: 'grey',
+                  color: globalStyle.COLORS.GRADIENT_START,
                   fontWeight: '500',
                   ...(style && {
                     marginBottom: style.top,
                     marginTop: style.top,
                   }),
                 }}>
-                ${product?.price}
+                ${Intl.NumberFormat().format(Number(product?.price))}
               </Text>
             </View>
           </TouchableWithoutFeedback>
@@ -125,11 +132,5 @@ const styles = StyleSheet.create({
     width: width - 16 * 3,
     marginTop: -27,
     marginHorizontal: 8,
-  },
-  shadow: {
-    shadowColor: 'black',
-    shadowOffset: {width: 0, height: 2},
-    shadowRadius: 4,
-    shadowOpacity: 0.1,
   },
 });

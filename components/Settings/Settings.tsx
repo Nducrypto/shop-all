@@ -159,7 +159,7 @@ function Settings() {
       case 'switch':
         return (
           <View style={styles.titleAndSwiCon}>
-            <Text style={{fontSize: 14}}>{item.title}</Text>
+            <Text style={styles.sharedText}>{item.title}</Text>
             <Switch
               onValueChange={() => toggleSwitch(item.id)}
               ios_backgroundColor={globalStyle.COLORS.SWITCH_OFF}
@@ -185,11 +185,12 @@ function Settings() {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                 }}>
-                <Text style={{fontSize: 14}}>{item.title}</Text>
+                <Text style={styles.sharedText}>{item.title}</Text>
                 <FontAwesome
                   name="angle-right"
                   style={{paddingRight: 5}}
                   size={26}
+                  color="black"
                 />
               </View>
             </TouchableOpacity>
@@ -203,7 +204,7 @@ function Settings() {
   const Section = ({header, data}: {header: string; data: any[]}) => (
     <View style={styles.titleCon}>
       <Text style={styles.headerLabel}>{header}</Text>
-      <Text style={{fontSize: 12, textAlign: 'center'}}>
+      <Text style={{...styles.sharedText, fontSize: 12, textAlign: 'center'}}>
         {header === 'Recommended Settings'
           ? 'These are the most important settings'
           : header === 'Payment Settings'
@@ -237,6 +238,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     paddingBottom: 5,
+    color: 'black',
   },
   titleCon: {
     paddingTop: 10,
@@ -253,5 +255,9 @@ const styles = StyleSheet.create({
     height: 40,
     paddingHorizontal: 12,
     marginBottom: 2,
+  },
+  sharedText: {
+    fontSize: 14,
+    color: 'black',
   },
 });

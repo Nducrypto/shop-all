@@ -3,7 +3,7 @@ import React from 'react';
 import globalStyle from '../../constants/globalStyle';
 
 interface Props {
-  title: string;
+  title: string | React.JSX.Element;
   width: any;
   onPress: any;
   testID: string;
@@ -43,7 +43,7 @@ export default CustomButton;
 const styles = StyleSheet.create({
   button: {
     backgroundColor: globalStyle.COLORS.BUTTON_COLOR,
-    padding: 15,
+    padding: 10,
     alignItems: 'center',
     borderRadius: 6,
   },

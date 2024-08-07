@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, ImageBackground, Text, StatusBar} from 'react-native';
 import CustomButton from '../CustomButton/CustomButton';
-import {height} from '../../constants/utils';
+import {getStartedStorageKey, height} from '../../constants/utils';
 import globalStyle from '../../constants/globalStyle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
@@ -19,7 +19,7 @@ const GetStarted = () => {
         hasUserVisitedBefore: true,
       }));
       AsyncStorage.setItem(
-        'getStarted',
+        getStartedStorageKey,
         JSON.stringify('This user has visied'),
       );
     } catch (error) {}

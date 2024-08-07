@@ -10,11 +10,13 @@ import {
 } from 'react-native';
 import * as chatAction from '../../../actions/chatActions';
 import * as chatState from '../../recoilState/chatState';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
 import {styles} from './custCareStyles';
 import {useUserState} from '../../recoilState/userState';
 import {useSnackBarState} from '../../recoilState/snacbarState';
-// import moment from "moment";
+import globalStyle from '../../../constants/globalStyle';
+import moment from 'moment';
 
 const CustomerCare = () => {
   chatAction.fetchAllChat();
@@ -22,13 +24,11 @@ const CustomerCare = () => {
   const [optionsIsVisible, setOptionsIsVisible] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<chatState.Message[]>([]);
 
-  const drawerPosition = 'left';
   const drawer = useRef<any>(null);
   const {currentUser} = useUserState();
   const {setSnackBar} = useSnackBarState();
   const {allChat} = chatState.useAllChatState();
 
-  // const { isVibrationEnabled } = useSelector((state) => state.chats);
   const uniqueDialogues = chatState.customerSpecificChat(
     selectedUser[0]?.customerId,
     allChat,
@@ -51,7 +51,6 @@ const CustomerCare = () => {
       alignmentKey: currentUser?.userId || '',
     };
     Keyboard.dismiss();
-
     setMessage('');
     chatAction.createMessage(data as chatState.Message, setSnackBar);
   }
@@ -68,69 +67,78 @@ const CustomerCare = () => {
   }
 
   function getUnreadUserMessages(messages: chatState.Message[]) {
-    const filteredUnreadUserMessages = messages.filter(
+    return messages.filter(
       item => item.status === 'Unread' && item.role !== 'Admin',
     );
-    return filteredUnreadUserMessages.length > 0
-      ? filteredUnreadUserMessages
-      : [];
   }
+
   function handleDeleteChat(chatId: string) {
     chatAction.deleteChat(chatId, setSnackBar);
   }
+
+  const handleToggleDrawer = () => {
+    if (drawer.current) {
+      drawer.current.openDrawer();
+    }
+  };
+
   const handleCloseDrawer = () => {
-    drawer?.current?.closeDrawer();
+    drawer.current?.closeDrawer();
   };
 
-  const navigationView = () => {
-    return (
-      <View>
-        {currentUser?.role === 'Admin' && (
-          <View>
-            <ScrollView showsVerticalScrollIndicator={false}>
-              {userSelection.map(([conversationId, messagesData]: any) => {
-                const unreadMessages = getUnreadUserMessages(messagesData);
-                return (
-                  <TouchableOpacity
-                    key={conversationId}
-                    style={
-                      selectedUser.length > 0 &&
-                      selectedUser[0]?.customerId ===
-                        messagesData[0]?.customerId
-                        ? styles.selected
-                        : styles.notSelected
-                    }
-                    onPress={() => {
-                      handleUserSelect(messagesData, unreadMessages);
-
-                      handleCloseDrawer();
-                    }}>
-                    <Text style={styles.email}>{messagesData[0]?.email}</Text>
-                    <Text>{unreadMessages?.length}</Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </ScrollView>
-          </View>
-        )}
-      </View>
-    );
-  };
+  const navigationView = () => (
+    <View>
+      {currentUser?.role === 'Admin' && (
+        <View>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {userSelection.map(([conversationId, messagesData]: any) => {
+              const unreadMessages = getUnreadUserMessages(messagesData);
+              return (
+                <TouchableOpacity
+                  key={conversationId}
+                  style={
+                    selectedUser.length > 0 &&
+                    selectedUser[0]?.customerId === messagesData[0]?.customerId
+                      ? styles.selected
+                      : styles.notSelected
+                  }
+                  onPress={() => {
+                    handleUserSelect(messagesData, unreadMessages);
+                    handleCloseDrawer();
+                  }}>
+                  <Text style={styles.email}>
+                    {messagesData[0]?.email.split('@')[0]}
+                  </Text>
+                  <Text>{unreadMessages.length}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+        </View>
+      )}
+    </View>
+  );
 
   return (
     <DrawerLayoutAndroid
       drawerWidth={300}
       ref={drawer}
-      drawerPosition={drawerPosition}
+      drawerPosition="left"
       renderNavigationView={navigationView}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerText}>
-            {' '}
             {selectedUser.length > 0
-              ? `Chat with ${selectedUser[0].email}`
+              ? `Chat with ${selectedUser[0].email.split('@')[0]}`
               : 'Select a user to chat'}
           </Text>
+          <TouchableOpacity
+            onPress={handleToggleDrawer}
+            style={{
+              width: 20,
+            }}>
+            <FontAwesome name="bars" size={24} color="white" />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.content}>
@@ -142,15 +150,13 @@ const CustomerCare = () => {
               {uniqueDialogues.map((chat: any) => (
                 <View
                   key={chat.chatId}
-                  style={[
-                    styles.message,
-                    {
-                      alignSelf:
-                        chat.role === 'Admin' ? 'flex-end' : 'flex-start',
-                      backgroundColor:
-                        chat.role === 'Admin' ? 'orangered' : 'orange',
-                    },
-                  ]}>
+                  style={{
+                    ...styles.message,
+                    ...(chat.role === 'Admin' && {
+                      alignSelf: 'flex-end',
+                      backgroundColor: globalStyle.COLORS.BUTTON_COLOR,
+                    }),
+                  }}>
                   <TouchableOpacity
                     onPress={() =>
                       setOptionsIsVisible(prev =>
@@ -161,21 +167,32 @@ const CustomerCare = () => {
                       alignItems:
                         chat.role === 'Admin' ? 'flex-end' : 'flex-start',
                     }}>
-                    <Icon name="edit" size={15} color="white" />
+                    <FontAwesome name="edit" size={15} color="red" />
                   </TouchableOpacity>
 
-                  <Text style={styles.messageText}>{chat.message}</Text>
-                  <View
-                    //  ref={bottomRef}
-                    style={styles.messageStatus}>
-                    {/* <Text>{moment(chat?.date).format("h:mm A")}</Text> */}
+                  <Text
+                    style={{
+                      ...styles.messageText,
+                      ...(chat.role === 'Admin' && {
+                        color: 'white',
+                      }),
+                    }}>
+                    {chat.message}
+                  </Text>
+                  <View style={styles.messageStatus} />
+                  <View>
+                    <Text style={styles.messageDate}>
+                      {moment(new Date(chat.timestamp).toISOString()).format(
+                        'h:mm A',
+                      )}
+                    </Text>
                   </View>
                   {optionsIsVisible === chat.chatId && (
                     <View>
-                      <Icon
+                      <FontAwesome
                         name="trash"
-                        size={20}
-                        color="green"
+                        size={15}
+                        color="red"
                         onPress={() => handleDeleteChat(chat.chatId)}
                       />
                     </View>
@@ -187,16 +204,21 @@ const CustomerCare = () => {
 
           {selectedUser && (
             <View style={styles.messageInput}>
+              <Entypo
+                onPress={handleReplyCustomer}
+                testID="button"
+                disabled={!message}
+                size={16}
+                name="camera"
+                style={{paddingRight: 8, color: globalStyle.COLORS.MUTED}}
+              />
               <TextInput
-                // ref={bottomRef}
-                style={styles.input}
                 value={message}
                 onChangeText={text => setMessage(text)}
-                placeholder="Type your message..."
+                placeholder="Message"
+                style={styles.input}
+                placeholderTextColor="grey"
               />
-              <TouchableOpacity onPress={handleReplyCustomer}>
-                <Text>send</Text>
-              </TouchableOpacity>
             </View>
           )}
         </View>

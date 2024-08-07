@@ -32,4 +32,15 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 30,
   },
+  faceIdBtn: {
+    width: 130,
+    alignSelf: 'center',
+    padding: 6,
+    alignItems: 'center',
+    marginTop: 30,
+  },
+  faceIdText: {
+    color: 'white',
+    marginTop: 10,
+  },
 });

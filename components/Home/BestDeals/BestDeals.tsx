@@ -32,6 +32,7 @@ const BestDeals = () => {
         handleSelect={setSelectedTitle}
       />
       <ScrollView
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{alignItems: 'center', maxWidth: width}}>
         <DataLoader
           size="large"

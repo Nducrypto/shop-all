@@ -3,6 +3,17 @@ import globalStyle from '../../constants/globalStyle';
 import {height, width} from '../../constants/utils';
 
 export const styles = StyleSheet.create({
+  emptyCartCon: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+  },
+  emptyCartText: {
+    fontSize: 14,
+    color: 'black',
+    fontWeight: '600',
+    padding: 12,
+  },
   subTotalCont: {
     flexDirection: 'row',
   },
@@ -17,21 +28,16 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   viewSavedItemtext: {
-    color: globalStyle.COLORS.GRADIENT_START,
+    color: globalStyle.COLORS.DARKGREEN,
     textAlign: 'center',
     marginTop: 10,
+    fontWeight: '700',
   },
   itemCon: {
     marginVertical: 20,
     marginTop: 20,
   },
-  shadow: {
-    shadowColor: 'black',
-    shadowOffset: {width: 0, height: 2},
-    shadowRadius: 4,
-    shadowOpacity: 0.1,
-    elevation: 2,
-  },
+
   imgAndTextCon: {
     flexDirection: 'row',
     width: width / 2,

@@ -13,9 +13,9 @@ import {it} from '@jest/globals';
 import renderer from 'react-test-renderer';
 
 it('renders correctly', () => {
-  console.log('renders correctly');
+  // console.log('renders correctly');
 
-  // renderer.create(<App />);
+  renderer.create(<App />);
 });
 
-// npm test -- __tests__/CustomerList.test.tsx
+// npm test -- __tests__/BestDeals.test.tsx

@@ -23,7 +23,7 @@ const ShoppedByOthers = ({products, addToCart}: Props) => {
 
   return (
     <View style={{marginBottom: 50}}>
-      <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+      <Text style={{fontSize: 16, fontWeight: 'bold', color: 'black'}}>
         Customers who shopped for items in your cart also shopped for:
       </Text>
       <ScrollView
@@ -33,7 +33,7 @@ const ShoppedByOthers = ({products, addToCart}: Props) => {
           gap: 10,
           minWidth: width,
         }}>
-        {products.map((item, index) => (
+        {products.slice(0, 8).map((item, index) => (
           <View key={index} style={{marginTop: 30}}>
             <Card minHeight={194} maxWidth={width / 2.6} paddingLeft={4}>
               <TouchableWithoutFeedback
@@ -43,7 +43,7 @@ const ShoppedByOthers = ({products, addToCart}: Props) => {
                   })
                 }>
                 <View>
-                  <View style={[styles.imageContainer, styles.shadow]}>
+                  <View style={styles.imageContainer}>
                     <Image
                       source={{uri: item.image[0]}}
                       style={[styles.image, {width: width / 3}]}

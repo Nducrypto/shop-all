@@ -10,6 +10,7 @@ import {useProductState, ProductInterface} from '../recoilState/productState';
 
 interface ProductRouteParams {
   category?: string;
+  type?: string;
 }
 
 type RootStackParamList = {
@@ -17,14 +18,13 @@ type RootStackParamList = {
 };
 
 const Search = () => {
+  const {params} = useRoute<RouteProp<RootStackParamList, 'ProductSearch'>>();
+  const searchCategory = params?.category ?? '';
+  const type = params?.type ?? '';
+  const [searchType, setSearchType] = useState<string>(type);
   const [filteredProduct, setFilteredProduct] = useState<ProductInterface[]>(
     [],
   );
-
-  const {params} = useRoute<RouteProp<RootStackParamList, 'ProductSearch'>>();
-  const searchCategory = params?.category ?? '';
-
-  const [searchType, setSearchType] = useState<string>('');
 
   const {allProducts, isProductLoading} = useProductState();
 
@@ -39,20 +39,28 @@ const Search = () => {
   };
 
   useEffect(() => {
-    if (searchCategory && !searchType) {
-      const filter = allProducts.filter(
-        item => item.category.toLowerCase() === searchCategory.toLowerCase(),
-      );
-      setFilteredProduct(filter);
-    } else if (!searchType && !searchCategory) {
-      setFilteredProduct(allProducts);
+    function performSearch() {
+      if (searchCategory && !searchType) {
+        const filter = allProducts.filter(
+          item => item.category.toLowerCase() === searchCategory.toLowerCase(),
+        );
+        setFilteredProduct(filter);
+      } else if (!searchType && !searchCategory) {
+        setFilteredProduct(allProducts);
+      }
     }
+    performSearch();
   }, [searchType, searchCategory, allProducts]);
+
+  useEffect(() => {
+    if (searchCategory && searchType) {
+      handleSearch();
+    }
+  }, []);
 
   return (
     <View style={styles.home}>
       <StatusBar barStyle="dark-content" backgroundColor="black" />
-
       <Card minHeight={100} maxWidth={width} paddingLeft={0}>
         <View
           style={{
@@ -61,10 +69,12 @@ const Search = () => {
           <Input
             right
             color="black"
+            placeholderTextColor="grey"
             style={{
               height: 48,
               borderWidth: 1,
               borderRadius: 3,
+              color: 'red',
             }}
             iconContent={
               <Entypo
@@ -81,20 +91,23 @@ const Search = () => {
           />
         </View>
       </Card>
-
-      <DataLoader
-        size="large"
-        style={{marginTop: 60}}
-        isLoading={isProductLoading}
-        array={filteredProduct}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.products}>
-          {filteredProduct.map((product, index) => (
-            <Product product={product} horizontal key={index} />
-          ))}
-        </ScrollView>
-      </DataLoader>
+      <ScrollView
+        contentContainerStyle={{alignItems: 'center'}}
+        showsVerticalScrollIndicator={false}>
+        <DataLoader
+          size="large"
+          style={{marginTop: 60}}
+          isLoading={isProductLoading}
+          array={filteredProduct}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.products}>
+            {filteredProduct.map((product, index) => (
+              <Product product={product} horizontal key={index} />
+            ))}
+          </ScrollView>
+        </DataLoader>
+      </ScrollView>
     </View>
   );
 };
@@ -103,6 +116,7 @@ const styles = StyleSheet.create({
   home: {
     flex: 1,
     width: width,
+    paddingBottom: 10,
   },
   search: {
     height: 48,

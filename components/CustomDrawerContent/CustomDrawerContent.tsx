@@ -20,6 +20,7 @@ import {
   useGlobalState,
   GlobalStateProps,
 } from '../../components/recoilState/globalState';
+import {getStartedStorageKey} from '../../constants/utils';
 
 const CustomDrawerContent = (props: any) => {
   useAuthentication();
@@ -32,14 +33,14 @@ const CustomDrawerContent = (props: any) => {
 
   function handleNavigation(screenName: string, label: string) {
     if (screenName === screen.search) {
-      goToSearchPage(screenName, label);
+      navigateToSearch(screenName, label);
       return;
     }
     navigation.navigate(screenName);
     setSelectedScreen(label);
   }
 
-  function goToSearchPage(screen: string, label: string) {
+  function navigateToSearch(screen: string, label: string) {
     setSelectedScreen('Home');
     setGlobalState((prev: GlobalStateProps) => ({
       ...prev,
@@ -55,7 +56,7 @@ const CustomDrawerContent = (props: any) => {
   async function handleSignOut() {
     try {
       await signOut(auth);
-      await AsyncStorage.removeItem('getStarted');
+      await AsyncStorage.removeItem(getStartedStorageKey);
       setGetStarted((prev: GetStarted) => ({
         ...prev,
         hasUserVisitedBefore: false,
@@ -64,8 +65,6 @@ const CustomDrawerContent = (props: any) => {
       navigation.navigate(screen.homeStack);
     } catch (error) {}
   }
-  const avatar =
-    'https://images.unsplash.com/photo-1519617317074-dfb3902fc51a?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTR8fHNrYXRlcnxlbnwwfHwwfHx8MA%3D%3D';
 
   const screens = [
     {label: 'Home', icon: 'home', screen: screen.homeStack, IconType: Feather},
@@ -81,12 +80,7 @@ const CustomDrawerContent = (props: any) => {
       screen: screen.search,
       IconType: Feather,
     },
-    {
-      label: 'Kids',
-      icon: 'users',
-      screen: screen.search,
-      IconType: Feather,
-    },
+
     ...(currentUser && currentUser?.email
       ? [
           {
@@ -131,10 +125,27 @@ const CustomDrawerContent = (props: any) => {
                 setSelectedScreen(screen.profile);
             }}>
             <View style={styles.profile}>
-              <Image
-                source={{uri: currentUser?.profilePic || avatar}}
-                style={styles.avatar}
-              />
+              {currentUser?.profilePic ? (
+                <Image
+                  source={{uri: currentUser?.profilePic}}
+                  style={styles.avatar}
+                />
+              ) : (
+                <View
+                  style={[
+                    styles.avatar,
+                    {
+                      alignItems: 'center',
+                      backgroundColor: 'grey',
+                      justifyContent: 'center',
+                    },
+                  ]}>
+                  <Text style={styles.authText}>
+                    {currentUser.userName.charAt(0)}
+                  </Text>
+                </View>
+              )}
+
               <Text
                 style={{fontSize: 18, color: 'white', fontWeight: '600'}}
                 numberOfLines={1}>
@@ -212,7 +223,7 @@ const CustomDrawerContent = (props: any) => {
           <TouchableOpacity
             style={{...styles.authBut, top: 30}}
             onPress={handleSignOut}>
-            <Entypo name="menu" size={20} color="grey" />
+            <AntDesign name="logout" size={17} color="grey" />
             <Text style={styles.authText}>Log Out</Text>
           </TouchableOpacity>
         ) : (
