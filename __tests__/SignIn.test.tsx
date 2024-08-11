@@ -1,16 +1,16 @@
 import React from 'react';
 import {render, fireEvent, waitFor, act} from '@testing-library/react-native';
-import {auth} from '../components/config/firebase';
-import {SignIn} from '../components';
+import {auth} from '../src/config/firebase';
+import {SignIn} from '../src/components';
 import {signInWithEmailAndPassword} from '../__mocks__/firebase/auth';
 import {mockNavigate} from '../__mocks__/@react-navigation/native';
-import {screen} from '../constants/screens';
-import * as biometrick from '../constants/biometricsUtils';
-import {signInWithFacebook} from '../components/Authentication/FirebaseSocialAuth';
+import {screenNames} from '../src/screen';
+import * as biometrick from '../src/utils/biometrics';
+import {signInWithFacebook} from '../src/utils/firebaseUtils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const userId = '123456';
-jest.mock('../components/recoilState/userState', () => ({
+jest.mock('../src/hook/useUsers', () => ({
   useUserState: () => ({
     user: {
       currentUser: {
@@ -23,11 +23,11 @@ jest.mock('../components/recoilState/userState', () => ({
   }),
 }));
 
-jest.mock('../constants/biometricsUtils', () => ({
+jest.mock('../src/utils/biometrics', () => ({
   checkIfBiometricKeysExist: jest.fn(),
   loginWithBiometrics: jest.fn(),
 }));
-jest.mock('../components/Authentication/FirebaseSocialAuth', () => ({
+jest.mock('../src/utils/firebaseUtils', () => ({
   signInWithFacebook: jest.fn(),
 }));
 
@@ -104,6 +104,10 @@ describe('Login', () => {
 
   it('should call handleFaceebokSignIn when Facebook icon is pressed', async () => {
     const {getByTestId} = render(<SignIn />);
+    await waitFor(() => {
+      expect(getByTestId('facebook-login-icon')).toBeTruthy();
+    });
+
     act(() => {
       fireEvent.press(getByTestId('facebook-login-icon'));
     });
@@ -118,7 +122,7 @@ describe('Login', () => {
       fireEvent.press(getByText("Don't have an Account? Sign Up"));
     });
 
-    expect(mockNavigate).toHaveBeenCalledWith(screen.signUp);
+    expect(mockNavigate).toHaveBeenCalledWith(screenNames.signUp);
   });
 
   it('logs in successfully with email and password', async () => {

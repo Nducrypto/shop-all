@@ -14,3 +14,4 @@ declare module '@env' {
   export const ORDERS: string;
 }
 declare module 'react-native-modal-dropdown';
+declare module 'react-native-responsive-screen';

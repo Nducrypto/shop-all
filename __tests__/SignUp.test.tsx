@@ -1,13 +1,13 @@
 import React from 'react';
 import {render, fireEvent, waitFor, act} from '@testing-library/react-native';
-import {auth} from '../components/config/firebase';
-import {SignUp} from '../components';
+import {auth} from '../src/config/firebase';
+import {SignUp} from '../src/components';
 import {createUserWithEmailAndPassword} from '../__mocks__/firebase/auth';
 import {collection, addDoc} from '../__mocks__/firebase/firestore';
 import {mockNavigate} from '../__mocks__/@react-navigation/native';
-import {screen} from '../constants/screens';
+import {screenNames} from '../src/screen';
 
-jest.mock('../components/recoilState/userState', () => ({
+jest.mock('../src/hook/useUsers', () => ({
   useUserState: jest.fn(() => ({})),
 }));
 
@@ -52,7 +52,7 @@ describe('Login', () => {
       fireEvent.press(getByText('Already have an account? Login'));
     });
 
-    expect(mockNavigate).toHaveBeenCalledWith(screen.signIn);
+    expect(mockNavigate).toHaveBeenCalledWith(screenNames.signIn);
   });
 
   it('signs up successfully', async () => {

@@ -1,16 +1,16 @@
 import React from 'react';
 import {act, fireEvent, render, waitFor} from '@testing-library/react-native';
-import {Cart} from '../components';
-import {useCartState} from '../components/recoilState/cartState';
-import {useUserState} from '../components/recoilState/userState';
+import {Cart} from '../src/components';
+import {useCartState} from '../src/hook/useCart';
+import {useUserState} from '../src/hook/useUsers';
 import {mockNavigate} from '../__mocks__/@react-navigation/native';
-import {removeCartItem} from '../actions/cartAction';
+import {removeCartItem} from '../src/actions/cartAction';
 
 const image =
   'https://images.unsplash.com/photo-1525328437458-0c4d4db7cab4?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZWNvbWVyY2UlMjBzdG9yZXxlbnwwfHwwfHx8MA%3D%3D';
 
 const userId = '123456';
-jest.mock('../components/recoilState/userState', () => ({
+jest.mock('../src/hook/useUsers', () => ({
   useUserState: jest.fn(() => ({
     previousRoute: 'Product-List',
     isUserLoading: false,
@@ -18,7 +18,7 @@ jest.mock('../components/recoilState/userState', () => ({
     setUser: jest.fn(() => ({})),
   })),
 }));
-jest.mock('../components/recoilState/cartState', () => ({
+jest.mock('../src/hook/useCart', () => ({
   useCartState: jest.fn(() => ({
     cartItems: [
       {title: 'Sample Product', image: [image], price: 5000},
@@ -31,27 +31,26 @@ jest.mock('../components/recoilState/cartState', () => ({
     subTotal: 500,
   })),
 }));
-jest.mock('../components/recoilState/productState', () => ({
+jest.mock('../src/hook/useProduct', () => ({
   useProductState: jest.fn(() => ({
     allProducts: [{title: 'Sample Product', image: [image]}],
   })),
 }));
-jest.mock('../components/recoilState/snacbarState', () => ({
+jest.mock('../src/hook/useSnackbar', () => ({
   useSnackBarState: jest.fn(() => ({
     setSnackBar: jest.fn(),
   })),
 }));
-jest.mock('../components/recoilState/orderState', () => ({
+jest.mock('../src/hook/useOrder', () => ({
   useOrderState: jest.fn(() => ({
     allOrders: [],
   })),
 }));
-jest.mock('../actions/cartAction', () => ({
+jest.mock('../src/actions/cartAction', () => ({
   removeCartItem: jest.fn(),
 }));
-
-jest.mock('galio-framework', () => ({
-  Button: (props: any) => <button {...props} />,
+jest.mock('../src/actions/usersAction', () => ({
+  useAuthentication: jest.fn(),
 }));
 
 describe('Cart Component', () => {
@@ -123,7 +122,7 @@ describe('Cart Component', () => {
     });
 
     const {getByText} = render(<Cart />);
-    expect(getByText('Empty')).toBeTruthy();
+    expect(getByText('You have no item in your cart')).toBeTruthy();
   });
 
   it('should render a message when there are no items in the cart for there are items saved for later', () => {

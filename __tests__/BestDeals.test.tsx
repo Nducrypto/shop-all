@@ -1,24 +1,24 @@
 import React from 'react';
 import {render, fireEvent, act} from '@testing-library/react-native';
-import {BestDeals} from '../components';
-import {useProductState} from '../components/recoilState/productState';
+import {BestDeals} from '../src/components';
+import {useProductState} from '../src/hook/useProduct';
 
 const image =
   'https://images.unsplash.com/photo-1525328437458-0c4d4db7cab4?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZWNvbWVyY2UlMjBzdG9yZXxlbnwwfHwwfHx8MA%3D%3D';
 
-jest.mock('../components/recoilState/productState', () => ({
+jest.mock('../src/hook/useProduct', () => ({
   useProductState: jest.fn(() => ({
     allProducts: [{category: 'All', image: [image]}],
     uniqueSubCategory: ['POPULAR', 'FASHION', 'CAR', 'PHONE'],
   })),
 }));
-jest.mock('../components/recoilState/globalState', () => ({
+jest.mock('../src/hook/useGlobal', () => ({
   useGlobalState: jest.fn(() => ({
     globalState: jest.fn(),
   })),
 }));
 
-jest.mock('../actions/productActions', () => ({
+jest.mock('../src/actions/productActions', () => ({
   fetchAllProducts: jest.fn(),
 }));
 

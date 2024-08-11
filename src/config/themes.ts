@@ -1,0 +1,47 @@
+import {hp, wp} from './appConfig';
+
+export default {
+  COLORS: {
+    DEFAULT: '#DCDCDC',
+    BLACK: '#000000',
+    WHITE: '#ffffff',
+    DARKGREEN: '#06402b',
+    PRIMARY: '#9C26B0',
+    LABEL: '#FE2472',
+    INFO: '#00BCD4',
+    ERROR: '#F44336',
+    SUCCESS: '#4CAF50',
+    WARNING: '#FF9800',
+    MUTED: '#979797',
+    INPUT: '#DCDCDC',
+    ACTIVE: '#9C26B0',
+    BUTTON_COLOR: '#1FAB13',
+    PLACEHOLDER: '#9FA5AA',
+    SWITCH_ON: '#1FAB13',
+    SWITCH_OFF: '#D4D9DD',
+    GRADIENT_START: '#6B24AA',
+    GRADIENT_END: '#AC2688',
+    PRICE_COLOR: '#EAD5FB',
+    BORDER_COLOR: '#E7E7E7',
+    BLOCK: '#E7E7E7',
+    ICON: '#4A4A4A',
+  },
+  FONT_SIZES: {
+    SMALL: wp('3.4%'),
+    MEDIUM: wp('4%'),
+    LARGE: wp('5'),
+    EXTRALARGE: wp('7.5'),
+  },
+  ICONS: {
+    SMALL: hp('2.3%'),
+    MEDIUM: hp('3%'),
+    LARGE: hp('6%'),
+  },
+  SIZES: {
+    BLOCK_SHADOW_RADIUS: 2,
+    FULLWIDTH: wp('100%'),
+    FULLHEIGHT: hp('100%'),
+    HALFWIDTH: wp('100%'),
+    HALFHEIGHT: hp('50%'),
+  },
+};

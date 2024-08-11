@@ -1,6 +1,6 @@
 import React from 'react';
 import {render} from '@testing-library/react-native';
-import CustomTitle from '../components/Home/CustomTitle/CustomTitle';
+import CustomTitle from '../src/components/Home/CustomTitle/CustomTitle';
 
 describe('Custom Title', () => {
   beforeEach(() => {
