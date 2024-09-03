@@ -1,12 +1,12 @@
 import React from 'react';
 import {render, fireEvent, waitFor, act} from '@testing-library/react-native';
 import {Alert} from 'react-native';
-import {Settings} from '../components';
-import * as biometricsUtils from '../constants/biometricsUtils';
-import {updateFaceIdStatus} from '../actions/usersAction';
+import {Settings} from '../src/components';
+import * as biometricsUtils from '../src/utils/biometrics';
+import {updateFaceIdStatus} from '../src/actions/usersAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-jest.mock('../components/recoilState/userState', () => ({
+jest.mock('../src/hook/useUsers', () => ({
   useUserState: () => ({
     currentUser: {
       userId: 'user123',
@@ -15,7 +15,7 @@ jest.mock('../components/recoilState/userState', () => ({
     },
   }),
 }));
-jest.mock('../components/Settings/settingsData', () => ({
+jest.mock('../src/components/Settings/settingsData', () => ({
   recommended: [
     {
       title: 'Use FaceID to sign in',
@@ -44,14 +44,14 @@ jest.mock('../components/Settings/settingsData', () => ({
     {title: 'Privacy', id: 'Privacy', type: 'button', screen: 'Privacy'},
   ],
 }));
-jest.mock('../constants/biometricsUtils', () => ({
+jest.mock('../src/utils/biometrics', () => ({
   checkBiometrics: jest.fn(),
   deleteBiometricPublicKey: jest.fn(),
   generateBiometricPublicKey: jest.fn(),
   checkIfBiometricKeysExist: jest.fn(),
 }));
 
-jest.mock('../actions/usersAction', () => ({
+jest.mock('../src/actions/usersAction', () => ({
   updateFaceIdStatus: jest.fn(() => ({})),
 }));
 

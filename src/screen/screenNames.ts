@@ -1,0 +1,28 @@
+
+export const screenNames = {
+  signIn: 'SignIn',
+  signUp: 'SignUp',
+  forgotPassword: 'ForgotPassword',
+  homeStack: 'HomeStack',
+  profileStack: 'ProfileStack',
+  settingsStack: 'SettingsStack',
+  customerCare: 'CustomerCare',
+  addProduct: 'AddProduct',
+  productList: 'ProductList',
+  bestDeals: 'BestDeals',
+  categories: 'Categories',
+  search: 'Search',
+  productDetail: 'ProductDetail',
+  chat: 'Chat',
+  orders: 'Orders',
+  cart: 'Cart',
+  profile: 'Profile',
+  settings: 'Settings',
+  notifications: 'Notifications',
+  userAgreement: 'UserAgreement',
+  privacy: 'Privacy',
+  paymentOptions: 'PaymentOptions',
+  giftCard: 'GiftCard',
+  about: 'About',
+} as const;
+

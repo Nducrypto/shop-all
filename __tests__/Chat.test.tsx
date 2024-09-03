@@ -1,20 +1,20 @@
 import React from 'react';
 import {render, fireEvent, act, waitFor} from '@testing-library/react-native';
-import {Chat} from '../components';
-import {createMessage, updateUnreadMessage} from '../actions/chatActions';
+import {Chat} from '../src/components';
+import {createMessage, updateUnreadMessage} from '../src/actions/chatActions';
 import {
   customerSpecificChat,
   messageNotificationForCustomer,
-} from '../components//recoilState/chatState';
-import {useUserState} from '../components/recoilState/userState';
+} from '../src/hook/useChat';
+import {useUserState} from '../src/hook/useUsers';
 
-jest.mock('../actions/chatActions', () => ({
+jest.mock('../src/actions/chatActions', () => ({
   fetchAllChat: jest.fn(),
   createMessage: jest.fn(),
   updateUnreadMessage: jest.fn(),
 }));
 
-jest.mock('../components/recoilState/chatState', () => ({
+jest.mock('../src/hook/useChat', () => ({
   customerSpecificChat: jest.fn(() => []),
   messageNotificationForCustomer: jest.fn(() => []),
   useAllChatState: jest.fn(() => ({
@@ -22,7 +22,7 @@ jest.mock('../components/recoilState/chatState', () => ({
   })),
 }));
 
-jest.mock('..//components/recoilState/userState', () => ({
+jest.mock('../src/hook/useUsers', () => ({
   useUserState: jest.fn(() => ({
     currentUser: {
       userId: '123',
@@ -33,7 +33,7 @@ jest.mock('..//components/recoilState/userState', () => ({
   })),
 }));
 
-jest.mock('../components/recoilState/snacbarState', () => ({
+jest.mock('../src/hook/useSnackbar', () => ({
   useSnackBarState: jest.fn(() => ({
     setSnacBar: jest.fn(),
   })),

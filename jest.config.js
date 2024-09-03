@@ -26,7 +26,6 @@ module.exports = {
       '<rootDir>/__mocks__/@react-navigation/native.ts',
     '^@react-navigation/stack$':
       '<rootDir>/__mocks__/@react-navigation/stack.ts',
-    '^galio-framework$': '<rootDir>/_mocks_/galio-framework.ts',
     '^greact-native-fbsdk-next$':
       '<rootDir>/_mocks_/react-native-fbsdk-next.ts',
     '^react-native-quick-crypto$':

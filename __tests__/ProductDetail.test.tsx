@@ -1,11 +1,12 @@
 import React from 'react';
 import {render, fireEvent, waitFor, act} from '@testing-library/react-native';
-import {ProductDetail} from '../components';
-import {useCartState} from '../components/recoilState/cartState';
-import {addProductToCart} from '../actions/cartAction';
+import {ProductDetail} from '../src/components';
+import {useCartState} from '../src/hook/useCart';
+import {addProductToCart} from '../src/actions/cartAction';
 import {mockNavigate, useRoute} from '../__mocks__/@react-navigation/native';
 import {Alert} from 'react-native';
-import {screen} from '../constants/screens';
+import {screenNames} from '../src/screen';
+import themes from '../src/config/themes';
 
 const image =
   'https://images.unsplash.com/photo-1525328437458-0c4d4db7cab4?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZWNvbWVyY2UlMjBzdG9yZXxlbnwwfHwwfHx8MA%3D%3D';
@@ -13,7 +14,7 @@ const image =
 const mockSetCart = jest.fn();
 const mockSetSnackBar = jest.fn();
 
-jest.mock('../components/recoilState/cartState', () => ({
+jest.mock('../src/hook/useCart', () => ({
   useCartState: jest.fn(() => ({
     cartItems: [],
     setCart: mockSetCart,
@@ -21,13 +22,13 @@ jest.mock('../components/recoilState/cartState', () => ({
   })),
 }));
 
-jest.mock('../components/recoilState/snacbarState', () => ({
+jest.mock('../src/hook/useSnackbar', () => ({
   useSnackBarState: jest.fn(() => ({
     setSnackBar: mockSetSnackBar,
   })),
 }));
 
-jest.mock('../actions/cartAction', () => ({
+jest.mock('../src/actions/cartAction', () => ({
   addProductToCart: jest.fn(),
 }));
 
@@ -60,7 +61,8 @@ describe('ProductDetail', () => {
 
   it('handles size selection correctly', () => {
     const {getByText} = render(<ProductDetail />);
-    expect(getByText('M').props.style.color).toBe('black');
+    expect(getByText('M').props.style.color).toBe(themes.COLORS.BLACK);
+    // expect(getByText('M').props.style.color).toBe('#000000');
     act(() => {
       fireEvent.press(getByText('M'));
     });
@@ -114,7 +116,7 @@ describe('ProductDetail', () => {
       fireEvent.press(getByTestId('chat-icon-button'));
     });
 
-    expect(mockNavigate).toHaveBeenCalledWith(screen.chat);
+    expect(mockNavigate).toHaveBeenCalledWith(screenNames.chat);
   });
 
   it('handles product with no images correctly', () => {

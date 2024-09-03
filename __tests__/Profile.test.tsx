@@ -1,14 +1,14 @@
 import React from 'react';
 import {render, fireEvent, act} from '@testing-library/react-native';
 import {mockNavigate} from '../__mocks__/@react-navigation/native';
-import {Profile} from '../components';
-import {getAllOrders} from '../actions/orderActions';
-import {screen} from '../constants/screens';
+import {Profile} from '../src/components';
+import {getAllOrders} from '../src/actions/orderActions';
+import {screenNames} from '../src/screen';
 
 const image =
   'https://images.unsplash.com/photo-1525328437458-0c4d4db7cab4?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZWNvbWVyY2UlMjBzdG9yZXxlbnwwfHwwfHx8MA%3D%3D';
 
-jest.mock('../components/recoilState/productState', () => ({
+jest.mock('../src/hook/useProduct', () => ({
   useProductState: jest.fn(() => ({
     allProducts: [
       {
@@ -22,7 +22,7 @@ jest.mock('../components/recoilState/productState', () => ({
     isProductLoading: false,
   })),
 }));
-jest.mock('../components/recoilState/globalState', () => ({
+jest.mock('../src/hook/useGlobal', () => ({
   useGlobalState: jest.fn(() => ({
     globalState: jest.fn(),
     recentlyViewed: [
@@ -37,7 +37,7 @@ jest.mock('../components/recoilState/globalState', () => ({
   })),
 }));
 
-jest.mock('../components/recoilState/userState', () => ({
+jest.mock('../src/hook/useUsers', () => ({
   useUserState: () => ({
     currentUser: {
       userId: 'user123',
@@ -52,14 +52,14 @@ jest.mock('../components/recoilState/userState', () => ({
   }),
 }));
 
-jest.mock('../components/recoilState/chatState', () => ({
+jest.mock('../src/hook/useChat', () => ({
   useAllChatState: () => ({
     allChat: {category: []},
   }),
   messageNotificationForCustomer: () => [{}, {}, {}],
 }));
 
-jest.mock('../components/recoilState/orderState', () => ({
+jest.mock('../src/hook/useOrder', () => ({
   useOrderState: () => ({
     orders: {
       isOrderLoading: false,
@@ -68,7 +68,7 @@ jest.mock('../components/recoilState/orderState', () => ({
   userOrdersHistory: () => [{}, {}],
 }));
 
-jest.mock('../actions/orderActions', () => ({
+jest.mock('../src/actions/orderActions', () => ({
   getAllOrders: jest.fn(),
 }));
 
@@ -106,7 +106,7 @@ describe('Profile Component', () => {
       fireEvent.press(getByText('View All'));
     });
     expect(mockNavigate).toHaveBeenCalledTimes(1);
-    expect(mockNavigate).toHaveBeenCalledWith(screen.homeStack);
+    expect(mockNavigate).toHaveBeenCalledWith(screenNames.homeStack);
   });
 
   it('should display the correct number of orders', () => {
