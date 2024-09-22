@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  StatusBar,
 } from 'react-native';
 import * as chatAction from '../../../actions/chatActions';
 import * as chatState from '../../../hook/useChat';
@@ -13,7 +14,6 @@ import {useUserState} from '../../../hook/useUsers';
 import {useSnackBarState} from '../../../hook/useSnackbar';
 import {Message} from '../../../hook/useChat';
 import Entypo from 'react-native-vector-icons/Entypo';
-
 import moment from 'moment';
 import {screenNames, NavigationProps} from '../../../screen';
 import {useNavigation} from '@react-navigation/native';
@@ -95,6 +95,7 @@ const Chat = () => {
 
   return (
     <View style={chatStyles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="white" />
       {!uniqueDialogues.length && (
         <Text style={chatStyles.welcomeText}>
           Hello {currentUser?.userName}! 😊 How can i assist you today?

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  StatusBar,
 } from 'react-native';
 import * as cartAction from '../../actions/cartAction';
 import {useNavigation} from '@react-navigation/native';
@@ -216,7 +217,7 @@ const Cart = () => {
                       <View style={cartStyles.inStockCon}>
                         <Text style={cartStyles.inStockText}>In stock</Text>
                         <Text style={cartStyles.price}>
-                          ${Intl.NumberFormat().format(item.price)}
+                          ₦ {Intl.NumberFormat().format(item.price)}
                         </Text>
                       </View>
                     </View>
@@ -251,38 +252,33 @@ const Cart = () => {
           </View>
         ))}
       </View>
-      <ScrollView>
+      <View>
         <ShoppedByOthers
           products={itemsShoppedByOthers}
           addToCart={handleAddToCart}
         />
-      </ScrollView>
-      <View style={{marginTop: -25}}>
         <CheckoutButton testID="bottom-checkout-button" />
       </View>
     </View>
   );
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{
-        alignItems: 'center',
-        paddingLeft: 13,
-        paddingVertical: 20,
-      }}>
-      {isOrderLoading ? (
-        <ActivityIndicator color="green" style={{marginTop: 100}} />
-      ) : numberOfItemsInCart < 1 ? (
-        renderEmptyCartMessage()
-      ) : (
-        renderCartItems()
-      )}
-      <SavedForLater
-        modalStatus={isSaveForLaterOpen}
-        setModalStatus={setIsSaveForLaterOpen}
-      />
-    </ScrollView>
+    <View style={cartStyles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="white" />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {isOrderLoading ? (
+          <ActivityIndicator color="green" style={cartStyles.spinner} />
+        ) : numberOfItemsInCart < 1 ? (
+          renderEmptyCartMessage()
+        ) : (
+          renderCartItems()
+        )}
+        <SavedForLater
+          modalStatus={isSaveForLaterOpen}
+          setModalStatus={setIsSaveForLaterOpen}
+        />
+      </ScrollView>
+    </View>
   );
 };
 

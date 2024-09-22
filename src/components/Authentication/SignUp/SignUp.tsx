@@ -7,7 +7,10 @@ import {authStyles} from '../authStyles';
 import CustomButton from '../../CustomButton/CustomButton';
 import AuthInput, {icons} from '../AuthInput';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {signInWithFacebook} from '../../../utils/firebaseUtils';
+import {
+  authWithService,
+  signInWithFacebook,
+} from '../../../utils/firebaseUtils';
 import {useUserState} from '../../../hook/useUsers';
 import {
   RootStackParamList,
@@ -15,6 +18,7 @@ import {
   DynamicNavigationProps,
 } from '../../../screen';
 import {wp} from '../../../config/appConfig';
+import themes from '../../../config/themes';
 
 const SignUp = () => {
   const [email, setEmail] = useState<string>('');
@@ -67,16 +71,28 @@ const SignUp = () => {
     }
   };
 
-  function handleFaceebokSignIn() {
-    signInWithFacebook(navigation.navigate, previousRoute, setLoading);
+  function handleSocialAuth(type: string) {
+    switch (type) {
+      case 'facebook':
+        signInWithFacebook(navigation.navigate, previousRoute, setLoading);
+        return;
+      case 'twitter':
+        authWithService('Twitter', setLoading);
+        return;
+      case 'dribbble':
+        authWithService('Dribbble', setLoading);
+        return;
+      default:
+        return;
+    }
   }
 
-  function isFaceBook(label: string) {
-    return label === 'facebook-with-circle';
-  }
   return (
     <View style={authStyles.signupContainer}>
-      <StatusBar barStyle="light-content" backgroundColor="black" />
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={themes.COLORS.DARKGREEN}
+      />
       <View style={authStyles.iconsCon}>
         {icons.map(icon => (
           <Entypo
@@ -84,7 +100,7 @@ const SignUp = () => {
             name={icon.name}
             color={icon.color}
             size={icon.size}
-            onPress={() => isFaceBook(icon.id) && handleFaceebokSignIn()}
+            onPress={() => handleSocialAuth(icon.type)}
           />
         ))}
       </View>

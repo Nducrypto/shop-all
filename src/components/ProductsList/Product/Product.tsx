@@ -57,11 +57,9 @@ const Product = ({product, horizontal, full, style}: Props) => {
               <Text
                 style={{
                   ...productStyles.productTitle,
-                  ...(style && {
-                    marginTop: style.top,
-                  }),
+                  ...(style && {marginTop: style.top}),
                 }}
-                numberOfLines={2}>
+                numberOfLines={1}>
                 {product?.title}
               </Text>
               <Text
@@ -73,7 +71,7 @@ const Product = ({product, horizontal, full, style}: Props) => {
                     marginTop: style.top,
                   }),
                 }}>
-                ${Intl.NumberFormat().format(Number(product?.price))}
+                ₦ {Intl.NumberFormat().format(Number(product?.price))}
               </Text>
             </View>
           </TouchableWithoutFeedback>

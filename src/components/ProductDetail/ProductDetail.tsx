@@ -160,7 +160,7 @@ const ProductDetail = () => {
 
             <View>
               <Text style={productDetailStyles.amount}>
-                ${Intl.NumberFormat().format(product?.price)}
+                ₦ {Intl.NumberFormat().format(product?.price)}
               </Text>
             </View>
           </View>

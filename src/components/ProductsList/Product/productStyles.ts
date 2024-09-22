@@ -5,7 +5,7 @@ import themes from '../../../config/themes';
 export const productStyles = StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical: 27,
+    marginVertical: 22,
   },
   product: {
     borderWidth: 0,
