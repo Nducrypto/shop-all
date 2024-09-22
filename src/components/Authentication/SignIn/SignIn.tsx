@@ -14,7 +14,6 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import AuthInput, {icons} from '../AuthInput/index.tsx';
 import CustomButton from '../../CustomButton/CustomButton.tsx';
 import {DynamicNavigationProps, screenNames} from '../../../screen';
-
 import {authStyles} from '../authStyles.ts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
@@ -23,8 +22,12 @@ import {
 } from '../../../utils/biometrics.ts';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
-import {signInWithFacebook} from '../../../utils/firebaseUtils.ts';
+import {
+  authWithService,
+  signInWithFacebook,
+} from '../../../utils/firebaseUtils.ts';
 import {hp, wp} from '../../../config/appConfig.ts';
+import themes from '../../../config/themes.ts';
 
 const SignIn = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -64,10 +67,6 @@ const SignIn = () => {
       setLoading(false);
     }
   };
-
-  function handleFaceebokSignIn() {
-    signInWithFacebook(navigation.navigate, previousRoute, setLoading);
-  }
 
   useEffect(() => {
     async function loadDataFromStorage() {
@@ -114,10 +113,27 @@ const SignIn = () => {
   if (currentUser && currentUser?.email && !isUserLoading) {
     navigation.navigate(screenNames.productList);
   }
-
+  function handleSocialAuth(type: string) {
+    switch (type) {
+      case 'facebook':
+        signInWithFacebook(navigation.navigate, previousRoute, setLoading);
+        return;
+      case 'twitter':
+        authWithService('Twitter', setLoading);
+        return;
+      case 'dribbble':
+        authWithService('Dribbble', setLoading);
+        return;
+      default:
+        return;
+    }
+  }
   return (
     <View style={authStyles.signupContainer}>
-      <StatusBar barStyle="light-content" backgroundColor="black" />
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={themes.COLORS.DARKGREEN}
+      />
       <View style={authStyles.iconsCon}>
         {icons.map(icon => (
           <Entypo
@@ -125,9 +141,7 @@ const SignIn = () => {
             name={icon.name}
             color={icon.color}
             size={icon.size}
-            onPress={() =>
-              icon.id === 'facebook-login-icon' && handleFaceebokSignIn()
-            }
+            onPress={() => handleSocialAuth(icon.type)}
             testID={icon.id}
           />
         ))}

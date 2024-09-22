@@ -114,7 +114,7 @@ const SavedForLater = ({modalStatus, setModalStatus}: Props) => {
                                 style={{
                                   color: 'red',
                                 }}>
-                                ${Intl.NumberFormat().format(item?.price)}
+                                ₦ {Intl.NumberFormat().format(item?.price)}
                               </Text>
                             </View>
                           </View>

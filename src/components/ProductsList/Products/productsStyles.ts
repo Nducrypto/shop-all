@@ -60,4 +60,8 @@ export const productsStyles = StyleSheet.create({
     width: wp('95%'),
     paddingVertical: 16,
   },
+  secondRow: {
+    flexDirection: 'row',
+    gap: 20,
+  },
 });

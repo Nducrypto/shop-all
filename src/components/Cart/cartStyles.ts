@@ -3,6 +3,13 @@ import {hp, wp} from '../../config/appConfig';
 import themes from '../../config/themes';
 
 export const cartStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    paddingLeft: 13,
+    paddingVertical: 20,
+  },
+
   emptyCartCon: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -100,5 +107,8 @@ export const cartStyles = StyleSheet.create({
     fontWeight: 'normal',
     fontStyle: 'normal',
     letterSpacing: -1,
+  },
+  spinner: {
+    marginTop: hp('25%'),
   },
 });

@@ -16,6 +16,7 @@ import {fetchAllProducts} from '../../../actions/productActions';
 import {NavigationProps, screenNames} from '../../../screen';
 import {useAuthentication} from '../../../actions/usersAction';
 import {productsStyles} from './productsStyles';
+import {hp} from '../../../config/appConfig';
 
 const Products = () => {
   fetchAllProducts();
@@ -88,17 +89,11 @@ const Products = () => {
     const otherRow = filteredProducts.slice(5, allProducts.length - 2);
     const lastRow = filteredProducts.slice(allProducts.length - 2);
     return (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={productsStyles.products}>
+      <View style={productsStyles.products}>
         {firstRow.map((product, index) => (
           <Product product={product} horizontal key={index} />
         ))}
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: 20,
-          }}>
+        <View style={productsStyles.secondRow}>
           {secondRow.map((product, index) => (
             <Product product={product} style={{top: 10}} key={index} />
           ))}
@@ -127,24 +122,22 @@ const Products = () => {
             style={{top: 10}}
           />
         ))}
-      </ScrollView>
+      </View>
     );
   };
 
   return (
     <View style={productsStyles.home}>
-      <StatusBar barStyle="dark-content" backgroundColor="black" />
-
+      <StatusBar barStyle="dark-content" backgroundColor="white" />
       <Card minHeight={100} maxWidth={500}>
         {renderSearch()}
-
         {renderTabs()}
       </Card>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <DataLoader
           size="large"
-          style={{marginTop: 60}}
+          style={{marginTop: hp('6%')}}
           isLoading={isProductLoading}
           array={filteredProducts}>
           {renderProducts()}

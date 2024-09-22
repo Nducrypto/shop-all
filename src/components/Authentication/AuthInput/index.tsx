@@ -64,17 +64,20 @@ export const icons = [
     color: 'blue',
     size: themes.ICONS.LARGE,
     id: 'facebook-login-icon',
+    type: 'facebook',
   },
   {
     name: 'twitter-with-circle',
     color: '#5BC0DE',
     size: themes.ICONS.LARGE,
     id: 'twitter-login-icon',
+    type: 'twitter',
   },
   {
     name: 'dribbble-with-circle',
     color: '#EA4C89',
     size: themes.ICONS.LARGE,
     id: 'dribbble-login-icon',
+    type: 'dribbble',
   },
 ];

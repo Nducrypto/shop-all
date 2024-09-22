@@ -1,15 +1,18 @@
 import * as firebase from '../config/firebase';
 import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
 import {USERS} from '@env';
-import {DynamicNavigationProps,  RootStackParamList, } from '../screen';
+import {DynamicNavigationProps, RootStackParamList} from '../screen';
 import {Alert} from 'react-native';
-import { ProductInterface } from '../hook/useProduct';
-import { OrderItem } from '../hook/useOrder';
+import {ProductInterface} from '../hook/useProduct';
+import {OrderItem} from '../hook/useOrder';
 import {UserInterface} from '../hook/useUsers';
 
 const usersRoute = USERS;
 
-export const createInDatabase = async (url: string, requestData: Partial<ProductInterface|OrderItem>) => {
+export const createInDatabase = async (
+  url: string,
+  requestData: Partial<ProductInterface | OrderItem>,
+) => {
   try {
     const productCollections = firebase.collection(firebase.firestore, url);
     const newDocument = await firebase.addDoc(productCollections, requestData);
@@ -30,13 +33,11 @@ export const removeInDatabase = async (url: string, docId: string) => {
   }
 };
 
-
-
-export const signInWithFacebook=async(
-  navigate: DynamicNavigationProps["navigate"],
+export const signInWithFacebook = async (
+  navigate: DynamicNavigationProps['navigate'],
   previousRoute: keyof RootStackParamList,
   setLoading: (value: boolean) => void,
-)=> {
+) => {
   setLoading(true);
   try {
     const result = await LoginManager.logInWithPermissions([
@@ -94,11 +95,24 @@ export const signInWithFacebook=async(
     setLoading(false);
 
     navigate(previousRoute);
-
   } catch (error) {
     setLoading(false);
-    Alert.alert('oops, something went wrong ', 'Try again leta');
+    Alert.alert(
+      'Oops! Something went wrong.',
+      `We're having trouble connecting to Facebook.  Please try again shortly.`,
+    );
     throw new Error();
   }
-}
+};
 
+type setLoading = (value: boolean) => void;
+export const authWithService = (service: string, setLoading: setLoading) => {
+  setLoading(true);
+  setTimeout(() => {
+    setLoading(false);
+    Alert.alert(
+      'Oops! Something went wrong.',
+      `We're having trouble connecting to ${service}.  Please try again shortly.`,
+    );
+  }, 900);
+};

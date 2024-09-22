@@ -5,15 +5,13 @@ import {cardStyles} from './cardStyles';
 interface Props {
   children: React.ReactNode;
   maxWidth: number;
-  minHeight: number;
+  minHeight?: number;
   paddingLeft?: number;
 }
-const Card = ({children, maxWidth, minHeight, paddingLeft}: Props) => {
-  return (
-    <View style={{...cardStyles.card, maxWidth, minHeight, paddingLeft}}>
-      {children}
-    </View>
-  );
-};
+const Card = ({children, maxWidth, minHeight, paddingLeft}: Props) => (
+  <View style={{...cardStyles.card, maxWidth, minHeight, paddingLeft}}>
+    {children}
+  </View>
+);
 
 export default Card;
